@@ -1,277 +1,318 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos do DOM
-    const startScreen = document.getElementById('start-screen');
-    const gameScreen = document.getElementById('game-screen');
-    const startBtn = document.getElementById('start-btn');
-    const playerNameInput = document.getElementById('player-name');
-    const difficultySelect = document.getElementById('difficulty');
-    const rankingList = document.getElementById('ranking-list');
-    const currentPlayerEl = document.getElementById('current-player');
-    const currentLevelEl = document.getElementById('current-level');
-    
-    // Variáveis do jogo
-    let score = 0;
-    let currentQuestion = 1;
-    const totalQuestions = 10;
-    let correctAnswer;
-    let playerName = '';
-    let difficulty = 3;
-    const difficultyLevels = {
-        1: { name: "Muito Fácil", maxNumber: 10, operations: ['+', '-'] },
-        2: { name: "Fácil", maxNumber: 15, operations: ['+', '-', '*'] },
-        3: { name: "Médio", maxNumber: 20, operations: ['+', '-', '*', '/'] },
-        4: { name: "Difícil", maxNumber: 30, operations: ['*', '/'] },
-        5: { name: "Muito Difícil", maxNumber: 50, operations: ['*', '/'], allowDecimals: true }
+    // Cache de elementos DOM
+    const dom = {
+        startScreen: document.getElementById('start-screen'),
+        gameScreen: document.getElementById('game-screen'),
+        startBtn: document.getElementById('start-btn'),
+        playerName: document.getElementById('player-name'),
+        difficulty: document.getElementById('difficulty'),
+        rankingList: document.getElementById('ranking-list'),
+        currentPlayer: document.getElementById('current-player'),
+        currentLevel: document.getElementById('current-level'),
+        questionEl: document.getElementById('question'),
+        optionsEl: document.getElementById('options'),
+        feedbackEl: document.getElementById('feedback'),
+        scoreEl: document.getElementById('score'),
+        questionCount: document.getElementById('question-count'),
+        nextBtn: document.getElementById('next')
     };
-    
-    // Inicializar ranking
-    loadRanking();
-    
-    // Evento para iniciar o jogo
-    startBtn.addEventListener('click', function() {
-        if (!playerNameInput.value.trim()) {
+
+    // Configurações do jogo
+    const config = {
+        totalQuestions: 10,
+        difficultyLevels: {
+            1: { name: "Muito Fácil", maxNumber: 10, operations: ['+', '-'] },
+            2: { name: "Fácil", maxNumber: 15, operations: ['+', '-', '*'] },
+            3: { name: "Médio", maxNumber: 20, operations: ['+', '-', '*', '/'] },
+            4: { name: "Difícil", maxNumber: 30, operations: ['*', '/'] },
+            5: { name: "Muito Difícil", maxNumber: 50, operations: ['*', '/'], allowDecimals: true }
+        }
+    };
+
+    // Estado do jogo
+    const state = {
+        score: 0,
+        currentQuestion: 0, // Alterado para começar em 0
+        correctAnswer: null,
+        playerName: '',
+        difficulty: 3
+    };
+
+    // Inicialização
+    init();
+
+    function init() {
+        loadRanking();
+        setupEventListeners();
+    }
+
+    function setupEventListeners() {
+        dom.startBtn.addEventListener('click', startGame);
+        dom.nextBtn.addEventListener('click', generateQuestion);
+    }
+
+    function startGame() {
+        if (!dom.playerName.value.trim()) {
             alert('Por favor, digite seu nome!');
             return;
         }
-        
-        playerName = playerNameInput.value.trim();
-        difficulty = parseInt(difficultySelect.value);
-        
-        currentPlayerEl.textContent = playerName;
-        currentLevelEl.textContent = difficultyLevels[difficulty].name;
-        
-        startScreen.style.display = 'none';
-        gameScreen.style.display = 'block';
-        
-        // Reiniciar jogo
-        score = 0;
-        currentQuestion = 1;
-        document.getElementById('score').textContent = score;
-        document.getElementById('question-count').textContent = currentQuestion;
-        
+
+        // Configurar estado inicial
+        state.playerName = dom.playerName.value.trim();
+        state.difficulty = parseInt(dom.difficulty.value);
+        state.score = 0;
+        state.currentQuestion = 0; // Começa em 0 agora
+
+        // Atualizar UI
+        dom.currentPlayer.textContent = state.playerName;
+        dom.currentLevel.textContent = config.difficultyLevels[state.difficulty].name;
+        dom.scoreEl.textContent = state.score;
+        dom.questionCount.textContent = state.currentQuestion + 1; // Mostra como 1-based
+
+        // Mostrar tela do jogo
+        dom.startScreen.style.display = 'none';
+        dom.gameScreen.style.display = 'block';
+
+        // Gerar primeira pergunta
         generateQuestion();
-    });
-    
-    // Gerar uma nova pergunta
+    }
+
     function generateQuestion() {
-        if (currentQuestion > totalQuestions) {
+        // Incrementa o contador primeiro
+        state.currentQuestion++;
+        
+        if (state.currentQuestion > config.totalQuestions) {
             endGame();
             return;
         }
+
+        // Atualizar contador (mostrado como 1-based)
+        dom.questionCount.textContent = state.currentQuestion;
+
+        // Limpar estado anterior
+        clearPreviousQuestion();
+
+        // Gerar nova pergunta
+        const question = createQuestion();
+        if (question) {
+            displayQuestion(question);
+        } else {
+// Se não conseguiu gerar uma pergunta válida, tenta novamente
+            state.currentQuestion--;
+            generateQuestion();
+        }
+    }
+
+    function clearPreviousQuestion() {
+        dom.feedbackEl.textContent = '';
+        dom.feedbackEl.className = 'feedback';
+        dom.nextBtn.style.display = 'none';
+        dom.optionsEl.innerHTML = '';
+    }
+
+    function createQuestion() {
+        const level = config.difficultyLevels[state.difficulty];
+        const operation = level.operations[Math.floor(Math.random() * level.operations.length)];
         
-        // Atualizar contador
-        document.getElementById('question-count').textContent = currentQuestion;
+        let num1, num2, correctAnswer;
+        let attempts = 0;
+        const maxAttempts = 10;
         
-        // Limpar feedback
-        const feedbackEl = document.getElementById('feedback');
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'feedback';
-        document.getElementById('next').style.display = 'none';
-        
-        // Configurações baseadas na dificuldade
-        const levelConfig = difficultyLevels[difficulty];
-        const maxNumber = levelConfig.maxNumber;
-        const operations = levelConfig.operations;
-        const allowDecimals = levelConfig.allowDecimals || false;
-        
-        // Gerar números aleatórios
-        let num1 = Math.floor(Math.random() * maxNumber) + 1;
-        let num2 = Math.floor(Math.random() * maxNumber) + 1;
-        
-        // Escolher operação aleatória
-        const operation = operations[Math.floor(Math.random() * operations.length)];
-        
-        // Ajustar para divisão
-        if (operation === '/') {
-            if (!allowDecimals) {
-                // Garantir divisão inteira
-                const factors = [];
-                for (let i = 1; i <= num1; i++) {
-                    if (num1 % i === 0) factors.push(i);
-                }
+        // Tentar gerar uma pergunta válida
+        while (attempts < maxAttempts) {
+            attempts++;
+            
+            // Gerar números baseados na dificuldade
+            if (operation === '/' && !level.allowDecimals) {
+                num1 = Math.floor(Math.random() * level.maxNumber) + 1;
+                const factors = getFactors(num1);
                 num2 = factors[Math.floor(Math.random() * factors.length)] || 1;
+                if (num2 === 0) continue; // Evita divisão por zero
+                correctAnswer = num1 / num2;
+            } else if (operation === '/' && level.allowDecimals) {
+                num1 = Math.floor(Math.random() * level.maxNumber * 2) + 1;
+                num2 = Math.floor(Math.random() * level.maxNumber) + 1;
+                if (num2 === 0) continue; // Evita divisão por zero
+                correctAnswer = parseFloat((num1 / num2).toFixed(2));
             } else {
-                // Permitir decimais
-                num1 = Math.floor(Math.random() * maxNumber * 2) + 1;
-                num2 = Math.floor(Math.random() * maxNumber) + 1;
-            }
-        }
-        
-        // Calcular resposta correta
-        let correctResult;
-        switch (operation) {
-            case '+':
-                correctResult = num1 + num2;
-                break;
-            case '-':
-                correctResult = num1 - num2;
-                break;
-            case '*':
-                correctResult = num1 * num2;
-                break;
-            case '/':
-                correctResult = num1 / num2;
-                // Arredondar para 2 casas decimais se permitido
-                if (allowDecimals) {
-                    correctResult = Math.round(correctResult * 100) / 100;
+                num1 = Math.floor(Math.random() * level.maxNumber) + 1;
+                num2 = Math.floor(Math.random() * level.maxNumber) + 1;
+                
+                switch(operation) {
+                    case '+': correctAnswer = num1 + num2; break;
+                    case '-': correctAnswer = num1 - num2; break;
+                    case '*': correctAnswer = num1 * num2; break;
                 }
-                break;
-        }
-        
-        // Mostrar a pergunta
-        document.getElementById('question').textContent = `Quanto é ${num1} ${operation} ${num2}?`;
-        correctAnswer = correctResult;
-        
+            }
+
         // Gerar opções de resposta
-        const options = [correctResult];
-        
-        // Gerar respostas incorretas
-        while (options.length < 4) {
-            let wrongAnswer;
-            const variation = Math.floor(Math.random() * (difficulty * 2)) + 1;
+            const options = generateOptions(correctAnswer, level.allowDecimals);
             
-            // Gerar respostas próximas, mas erradas
-            if (Math.random() > 0.5) {
-                wrongAnswer = correctResult + variation;
-            } else {
-                wrongAnswer = correctResult - variation;
-            }
-            
-            // Para níveis com decimais
-            if (allowDecimals) {
-                wrongAnswer = Math.round(wrongAnswer * 100) / 100;
-            }
-            
-            // Evitar respostas duplicadas e negativas
-            if (!options.includes(wrongAnswer)) {
-                if (!allowDecimals && wrongAnswer > 0 && Number.isInteger(wrongAnswer)) {
-                    options.push(wrongAnswer);
-                } else if (allowDecimals) {
-                    options.push(wrongAnswer);
-                }
+            if (options.length === 4) {
+                return {
+                    text: `Quanto é ${num1} ${operation} ${num2}?`,
+                    correctAnswer,
+                    options
+                };
             }
         }
         
-        // Embaralhar opções
-        options.sort(() => Math.random() - 0.5);
-        
-        // Mostrar opções
-        const optionsEl = document.getElementById('options');
-        optionsEl.innerHTML = '';
-        options.forEach(option => {
+        return null; // Não conseguiu gerar uma pergunta válida
+    }
+
+     function getFactors(number) {
+        const factors = [];
+        for (let i = 1; i <= number; i++) {
+            if (number % i === 0) factors.push(i);
+        }
+        return factors;
+    }
+
+    function generateOptions(correctAnswer, allowDecimals) {
+        const options = [correctAnswer];
+        const usedValues = new Set([correctAnswer]);
+        let attempts = 0;
+        const maxAttempts = 20;
+
+        while (options.length < 4 && attempts < maxAttempts) {
+            attempts++;
+            
+            let variation;
+            if (allowDecimals) {
+                variation = (Math.random() * 5) + 1;
+            } else {
+                variation = Math.floor(Math.random() * 5) + 1;
+            }
+            
+            let wrongAnswer = Math.random() > 0.5 
+                ? correctAnswer + variation 
+                : correctAnswer - variation;
+
+            if (allowDecimals) {
+                wrongAnswer = parseFloat(wrongAnswer.toFixed(2));
+            } else {
+                wrongAnswer = Math.round(wrongAnswer);
+            }
+
+            // Garante que a resposta errada é positiva e não repetida
+            if (!usedValues.has(wrongAnswer) && (allowDecimals || wrongAnswer > 0)) {
+                options.push(wrongAnswer);
+                usedValues.add(wrongAnswer);
+            }
+        }
+
+        // Se não conseguiu gerar opções suficientes, completa com valores padrão
+        while (options.length < 4) {
+            let value = options[0] + options.length;
+            if (allowDecimals) {
+                value = parseFloat(value.toFixed(2));
+            }
+            if (!usedValues.has(value)) {
+                options.push(value);
+                usedValues.add(value);
+            }
+        }
+
+        return options.sort(() => Math.random() - 0.5);
+    }
+
+    function displayQuestion(question) {
+        dom.questionEl.textContent = question.text;
+        state.correctAnswer = question.correctAnswer;
+
+        question.options.forEach(option => {
             const button = document.createElement('button');
             button.textContent = option;
             button.addEventListener('click', () => checkAnswer(option));
-            optionsEl.appendChild(button);
+            dom.optionsEl.appendChild(button);
         });
     }
-    
-    // Verificar resposta
+
     function checkAnswer(selectedAnswer) {
-        const buttons = document.getElementById('options').querySelectorAll('button');
-        const feedbackEl = document.getElementById('feedback');
+        const buttons = dom.optionsEl.querySelectorAll('button');
         
         buttons.forEach(button => {
             button.disabled = true;
             const buttonValue = parseFloat(button.textContent);
             
-            if (buttonValue === correctAnswer) {
+            // Comparação segura para números decimais
+            if (Math.abs(buttonValue - state.correctAnswer) < 0.001) {
                 button.classList.add('correct');
-            } else if (parseFloat(selectedAnswer) === buttonValue && buttonValue !== correctAnswer) {
+            } else if (Math.abs(parseFloat(selectedAnswer) - buttonValue) < 0.001) {
                 button.classList.add('incorrect');
             }
         });
-        
-        if (parseFloat(selectedAnswer) === correctAnswer) {
-            feedbackEl.textContent = 'Resposta Correta! 👍';
-            feedbackEl.className = 'feedback correct';
-            score += difficulty; // Pontuação baseada na dificuldade
-            document.getElementById('score').textContent = score;
+
+        if (Math.abs(parseFloat(selectedAnswer) - state.correctAnswer) < 0.001) {
+            dom.feedbackEl.textContent = 'Resposta Correta! 👍';
+            dom.feedbackEl.className = 'feedback correct';
+            state.score += state.difficulty;
+            dom.scoreEl.textContent = state.score;
         } else {
-            feedbackEl.textContent = `Resposta Incorreta! A resposta correta é ${correctAnswer}.`;
-            feedbackEl.className = 'feedback incorrect';
+            dom.feedbackEl.textContent = `Resposta Incorreta! A resposta correta é ${state.correctAnswer}.`;
+            dom.feedbackEl.className = 'feedback incorrect';
         }
-        
-        document.getElementById('next').style.display = 'block';
-        currentQuestion++;
+
+        dom.nextBtn.style.display = 'block';
     }
-    
-    // Finalizar jogo
+
     function endGame() {
-        const questionEl = document.getElementById('question');
-        const optionsEl = document.getElementById('options');
-        const feedbackEl = document.getElementById('feedback');
-        const nextBtn = document.getElementById('next');
-        
-        questionEl.textContent = `Fim do Jogo, ${playerName}! Sua pontuação final: ${score}`;
-        optionsEl.innerHTML = '';
-        feedbackEl.textContent = '';
-        nextBtn.style.display = 'none';
-        
-        // Salvar pontuação no ranking
-        saveScore(playerName, score, difficultyLevels[difficulty].name);
-        
-        // Adicionar botão para jogar novamente
-        const restartBtn = document.createElement('button');
-        restartBtn.textContent = 'Jogar Novamente';
-        restartBtn.className = 'btn-jogar';
-        restartBtn.addEventListener('click', () => {
-            gameScreen.style.display = 'none';
-            startScreen.style.display = 'block';
-            loadRanking();
-        });
-        
-        optionsEl.appendChild(restartBtn);
+        dom.questionEl.textContent = `Fim do Jogo, ${state.playerName}! Sua pontuação final: ${state.score}`;
+        dom.optionsEl.innerHTML = '';
+        dom.feedbackEl.textContent = '';
+        dom.nextBtn.style.display = 'none';
+
+        saveScore();
+        showRestartButton();
     }
-    
-    // Salvar pontuação no localStorage
-    function saveScore(name, score, level) {
+
+    function saveScore() {
         let ranking = JSON.parse(localStorage.getItem('mathQuizRanking')) || [];
         
-        // Adicionar nova pontuação
         ranking.push({
-            name: name,
-            score: score,
-            level: level,
+            name: state.playerName,
+            score: state.score,
+            level: config.difficultyLevels[state.difficulty].name,
             date: new Date().toLocaleDateString()
         });
-        
-        // Ordenar por pontuação (maior primeiro)
+
         ranking.sort((a, b) => b.score - a.score);
-        
-        // Manter apenas as top 10 pontuações
-        if (ranking.length > 10) {
-            ranking = ranking.slice(0, 10);
-        }
+        ranking = ranking.slice(0, 10);
         
         localStorage.setItem('mathQuizRanking', JSON.stringify(ranking));
     }
-    
-    // Carregar ranking do localStorage
+
+    function showRestartButton() {
+        const button = document.createElement('button');
+        button.textContent = 'Jogar Novamente';
+        button.className = 'btn-jogar';
+        button.addEventListener('click', () => {
+            dom.gameScreen.style.display = 'none';
+            dom.startScreen.style.display = 'block';
+            loadRanking();
+        });
+        dom.optionsEl.appendChild(button);
+    }
+
     function loadRanking() {
         const ranking = JSON.parse(localStorage.getItem('mathQuizRanking')) || [];
-        rankingList.innerHTML = '';
-        
+        dom.rankingList.innerHTML = '';
+
         if (ranking.length === 0) {
-            rankingList.innerHTML = '<p>Nenhuma pontuação registrada ainda.</p>';
+            dom.rankingList.innerHTML = '<p>Nenhuma pontuação registrada ainda.</p>';
             return;
         }
-        
+
         ranking.forEach((item, index) => {
             const rankingItem = document.createElement('div');
             rankingItem.className = 'ranking-item';
-            
             rankingItem.innerHTML = `
                 <span class="ranking-position">${index + 1}º</span>
                 <span class="ranking-name">${item.name}</span>
                 <span class="ranking-score">${item.score} pts</span>
                 <span class="ranking-level">${item.level}</span>
             `;
-            
-            rankingList.appendChild(rankingItem);
+            dom.rankingList.appendChild(rankingItem);
         });
     }
-    
-    // Evento para próxima pergunta
-    document.getElementById('next').addEventListener('click', generateQuestion);
 });
