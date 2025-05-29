@@ -223,3 +223,46 @@ body {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* Estilos específicos para a página de inglês */
+.english-theme {
+    --primary-color: #2ecc71;
+    --secondary-color: #27ae60;
+}
+
+.english-card {
+    border-top: 4px solid var(--primary-color);
+}
+
+/* Ajustes para os cards em inglês */
+.game-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.game-card p {
+    font-size: 0.9rem;
+    min-height: 40px;
+    margin-bottom: 1rem;
+}
+
+/* Melhorias para grid com 4 itens */
+@media (min-width: 768px) {
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .games-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .game-card h2 {
+        font-size: 1.1rem;
+    }
+    
+    .game-card p {
+        font-size: 0.85rem;
+    }
+}
