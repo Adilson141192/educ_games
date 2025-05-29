@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Challenge - SAEB</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="english-theme">
+    <header class="game-header">
+        <div class="container">
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Vocabulary Challenge</h1>
+            <div class="game-stats">
+                <span id="score">Score: 0</span>
+                <span id="level">Level: 1</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="game-container">
+        <!-- Tela de Seleção de Modo -->
+        <div id="modeSelection" class="game-screen">
+            <h2>Select Game Mode</h2>
+            <div class="mode-options">
+                <button id="associationMode" class="mode-btn">
+                    <i class="fas fa-images"></i>
+                    <span>Word-Image Match</span>
+                </button>
+                <button id="flashcardMode" class="mode-btn">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Digital Flashcards</span>
+                </button>
+                <button id="sentenceMode" class="mode-btn">
+                    <i class="fas fa-align-left"></i>
+                    <span>Complete the Sentence</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Jogo -->
+        <div id="gameScreen" class="game-screen hidden">
+            <div id="questionContainer" class="question-container"></div>
+            <div id="optionsContainer" class="options-container"></div>
+            <div id="feedbackContainer" class="feedback-container"></div>
+            <button id="nextBtn" class="btn hidden">Next Question</button>
+        </div>
+
+        <!-- Tela de Resultados -->
+        <div id="resultsScreen" class="game-screen hidden">
+            <h2>Game Results</h2>
+            <div id="finalScore" class="final-score"></div>
+            <div id="performanceFeedback" class="performance-feedback"></div>
+            <button id="playAgainBtn" class="btn">Play Again</button>
+            <button id="changeModeBtn" class="btn secondary-btn">Change Mode</button>
+        </div>
+    </main>
+
+    <audio id="correctSound" src="assets/correct.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="assets/wrong.mp3" preload="auto"></audio>
+    <audio id="wordAudio" preload="auto"></audio>
+
+    <script src="js/data.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ranking.js"></script>
+</body>
+</html>
