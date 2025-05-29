@@ -95,7 +95,7 @@ function prepareAssociationGame() {
     });
 }
 
-// Preparar dados para o modo flashcard
+// Preparar dados para o modo flashcard (ATUALIZADO)
 function prepareFlashcardGame() {
     const selectedCategories = difficultyLevels[getDifficultyLevel()].categories;
     let words = [];
@@ -160,8 +160,11 @@ function showAssociationQuestion(question) {
     });
 }
 
-// Mostrar questão de flashcard
+// Mostrar questão de flashcard (ATUALIZADO)
 function showFlashcardQuestion(question) {
+    questionContainer.innerHTML = '';
+    optionsContainer.innerHTML = '';
+    
     // Mostrar palavra em inglês
     const wordEl = document.createElement('div');
     wordEl.className = 'word-text';
@@ -178,18 +181,56 @@ function showFlashcardQuestion(question) {
     });
     questionContainer.appendChild(audioBtn);
     
-    // Opções de tradução (em um modo avançado poderia mostrar opções)
-    setTimeout(() => {
-        const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.textContent = 'Show Translation';
-        btn.addEventListener('click', () => {
-            wordEl.textContent = question.translation;
-            btn.textContent = 'Next';
-            btn.addEventListener('click', goToNextQuestion, { once: true });
-        });
-        optionsContainer.appendChild(btn);
-    }, 1500);
+    // Adicionar campo para o jogador digitar a tradução
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'flashcard-input-container';
+    
+    const inputLabel = document.createElement('label');
+    inputLabel.textContent = 'What is the translation?';
+    inputLabel.htmlFor = 'translationInput';
+    inputContainer.appendChild(inputLabel);
+    
+    const translationInput = document.createElement('input');
+    translationInput.type = 'text';
+    translationInput.id = 'translationInput';
+    translationInput.placeholder = 'Type the translation...';
+    inputContainer.appendChild(translationInput);
+    
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn';
+    checkBtn.textContent = 'Check Answer';
+    checkBtn.addEventListener('click', () => {
+        const userAnswer = translationInput.value.trim().toLowerCase();
+        const correctAnswer = question.translation.toLowerCase();
+        
+        if (userAnswer === correctAnswer) {
+            currentScore += 10 * currentLevel;
+            correctAnswers++;
+            correctSound.play();
+            showFeedback('Correct!', true);
+        } else {
+            wrongSound.play();
+            showFeedback(`Incorrect. The correct translation is: ${question.translation}`, false);
+        }
+        
+        updateScore();
+        
+        // Mostrar a resposta correta
+        const answerDisplay = document.createElement('div');
+        answerDisplay.className = 'flashcard-answer';
+        answerDisplay.textContent = `Translation: ${question.translation}`;
+        inputContainer.appendChild(answerDisplay);
+        
+        // Desabilitar inputs
+        translationInput.disabled = true;
+        checkBtn.disabled = true;
+        
+        // Mostrar botão para próxima pergunta
+        nextBtn.classList.remove('hidden');
+    });
+    
+    inputContainer.appendChild(checkBtn);
+    optionsContainer.appendChild(inputContainer);
 }
 
 // Mostrar questão de completar frase
@@ -339,15 +380,22 @@ function updateScore() {
     levelElement.textContent = `Level: ${currentLevel}`;
 }
 
-// Obter nível de dificuldade
+// Obter nível de dificuldade (ATUALIZADO)
 function getDifficultyLevel() {
-    // Pode ser implementada uma lógica para aumentar a dificuldade
-    return 'medium'; // Padrão para médio por enquanto
+    // Agora todos os níveis têm 30 segundos, mas mantemos a estrutura para futuras expansões
+    if(currentScore >= 200) return 'hard';
+    if(currentScore >= 100) return 'medium';
+    return 'easy';
 }
 
 // Embaralhar array
 function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
 }
 
 // Event listeners
@@ -357,18 +405,3 @@ changeModeBtn.addEventListener('click', () => {
     resultsScreen.classList.add('hidden');
     modeSelection.classList.remove('hidden');
 });
-
-// Função para obter nível de dificuldade
-function getDifficultyLevel() {
-    return 'medium';
-}
-
-// Função para embaralhar array
-function shuffleArray(array) {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-}

@@ -194,6 +194,36 @@
     margin-bottom: 1.5rem;
 }
 
+/* Estilos para flashcards (NOVO) */
+.flashcard-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.flashcard-input-container label {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.flashcard-input-container input {
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.flashcard-answer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    text-align: center;
+}
+
 /* Responsividade */
 @media (min-width: 600px) {
     .options-container {
