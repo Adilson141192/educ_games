@@ -212,18 +212,12 @@ function init() {
     DOM.startButton.addEventListener('click', () => {
         startGame();
     });
-    
     DOM.backButton.addEventListener('click', () => {
         returnToMenu();
     });
-    
     DOM.backToMainButton.addEventListener('click', () => {
-        // Navega para a página principal (3 níveis acima)
-        window.location.href = '../../../index.html';
+        window.location.href = '../../index.html';
     });
-
-    // Restante do código de inicialização...
-}
 
     // Configuração dos botões de dificuldade
     DOM.difficultyButtons.forEach(button => {
@@ -239,6 +233,7 @@ function init() {
 
     // Define a dificuldade padrão
     setDifficulty('easy');
+}
 
 // Mostra/oculta a dica
 function toggleHint() {
@@ -327,48 +322,31 @@ function resetGame() {
 async function loadRandomWord() {
     gameState.isActive = true;
     
-    // Primeiro tenta usar as palavras locais em 80% das vezes
-    if (Math.random() < 0.8) {
-        useLocalWord();
-        return;
-    }
-
     try {
         const response = await fetch('https://api.dicionario-aberto.net/random');
         if (!response.ok) throw new Error("Falha na requisição");
         
         const data = await response.json();
-        const wordData = Array.isArray(data) ? data[0] : data;
-        
-        if (!wordData || !wordData.word) throw new Error("Palavra inválida da API");
+        if (!data.word) throw new Error("Palavra inválida da API");
 
-        setupWordData(wordData.word, wordData.xml || "");
+        const options = generateOptions(data.word, gameState.currentDifficulty);
+        const correctIndex = options.indexOf(data.word);
+        const hint = generateHint(data.word, gameState.currentDifficulty);
+
+        gameState.currentWord = {
+            word: data.word,
+            phonetic: data.phonetic || "",
+            options: options,
+            correct: correctIndex,
+            explanation: `A grafia correta é '${data.word}'.`,
+            hint: hint
+        };
     } catch (error) {
         console.error("Erro ao buscar palavra:", error);
-        useLocalWord();
+        const words = gameState.words[gameState.currentDifficulty];
+        const randomIndex = Math.floor(Math.random() * words.length);
+        gameState.currentWord = words[randomIndex];
     }
-}
-
-function useLocalWord() {
-    const words = gameState.words[gameState.currentDifficulty];
-    const randomIndex = Math.floor(Math.random() * words.length);
-    const wordData = words[randomIndex];
-    setupWordData(wordData.word, wordData.phonetic || "");
-}
-
-function setupWordData(word, phonetic) {
-    const options = generateOptions(word, gameState.currentDifficulty);
-    const correctIndex = options.indexOf(word);
-    const hint = generateHint(word, gameState.currentDifficulty);
-
-    gameState.currentWord = {
-        word: word,
-        phonetic: phonetic,
-        options: options,
-        correct: correctIndex,
-        explanation: `A grafia correta é '${word}'.`,
-        hint: hint
-    };
 
     displayWord();
     startTimer();
