@@ -60,17 +60,17 @@ const sentenceData = [
 // Níveis de dificuldade
 const difficultyLevels = {
     easy: {
-        timeLimit: 30000, // 30 segundos por pergunta
+        timeLimit: 30000,
         wordsPerGame: 10,
         categories: ["animals", "food"]
     },
     medium: {
-        timeLimit: 20000, // 20 segundos
+        timeLimit: 20000,
         wordsPerGame: 15,
         categories: ["animals", "food", "school"]
     },
     hard: {
-        timeLimit: 15000, // 15 segundos
+        timeLimit: 15000,
         wordsPerGame: 20,
         categories: ["animals", "food", "school"],
         includePhrases: true

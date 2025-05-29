@@ -218,3 +218,27 @@
         font-size: 1.5rem;
     }
 }
+
+/* Estilo para links dos cards de jogo */
+.game-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.game-card:hover .btn-jogar {
+    background-color: var(--dark-color);
+}
+
+.hidden { display: none !important; }
+
+.timer {
+    font-size: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.blank {
+    border-bottom: 2px solid var(--primary-color);
+    padding: 0 0.5rem;
+}

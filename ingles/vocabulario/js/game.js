@@ -143,10 +143,10 @@ function showQuestion() {
 
 // Mostrar questão de associação palavra-imagem
 function showAssociationQuestion(question) {
-    // Mostrar imagem
+    questionContainer.innerHTML = '';
     const img = document.createElement('img');
     img.src = `assets/images/${question.image}`;
-    img.alt = question.word;
+    img.onerror = () => { img.src = 'assets/images/placeholder.jpg'; };
     img.className = 'word-image';
     questionContainer.appendChild(img);
     
@@ -357,3 +357,18 @@ changeModeBtn.addEventListener('click', () => {
     resultsScreen.classList.add('hidden');
     modeSelection.classList.remove('hidden');
 });
+
+// Função para obter nível de dificuldade
+function getDifficultyLevel() {
+    return 'medium';
+}
+
+// Função para embaralhar array
+function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
