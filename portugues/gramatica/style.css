@@ -13,6 +13,8 @@
     --easy: #4CAF50;
     --medium: #FFC107;
     --hard: #F44336;
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
 }
 
 * {
@@ -20,19 +22,27 @@
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+}
+
+html {
+    height: -webkit-fill-available;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(45deg, #8E2DE2, #4A00E0);
     color: var(--text-light);
     line-height: 1.6;
     padding: 15px;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     display: flex;
     justify-content: center;
     align-items: center;
     touch-action: manipulation;
+    padding-bottom: calc(15px + var(--safe-area-inset-bottom));
+    padding-top: calc(15px + var(--safe-area-inset-top));
 }
 
 #game-container {
@@ -44,26 +54,33 @@ body {
     box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
+    margin: 0 auto;
 }
 
+/* Header Styles */
 header {
     text-align: center;
     margin-bottom: 15px;
+    padding-top: 10px;
 }
 
 header h1 {
-    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
     margin-bottom: 5px;
     background: linear-gradient(to right, #ffeb3b, #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 .subtitle {
-    font-size: 0.9rem;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
     opacity: 0.9;
+    line-height: 1.3;
 }
 
+/* Button Styles */
 .menu-button {
     position: absolute;
     top: 15px;
@@ -71,21 +88,23 @@ header h1 {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 1.1rem;
     z-index: 10;
+    touch-action: manipulation;
 }
 
-.menu-button:hover {
+.menu-button:hover, .menu-button:focus {
     background: rgba(255, 255, 255, 0.4);
     transform: scale(1.1);
+    outline: none;
 }
 
 .back-to-main {
@@ -94,9 +113,10 @@ header h1 {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
+/* Start Screen */
 #start-screen {
     display: flex;
     flex-direction: column;
@@ -106,11 +126,12 @@ header h1 {
 #difficulty-selector {
     margin-bottom: 15px;
     text-align: center;
+    width: 100%;
 }
 
 #difficulty-selector h2 {
     margin-bottom: 10px;
-    font-size: 1.1rem;
+    font-size: clamp(1.1rem, 4vw, 1.3rem);
 }
 
 .difficulty-options {
@@ -118,10 +139,11 @@ header h1 {
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
+    padding: 0 10px;
 }
 
 .difficulty-btn {
-    padding: 8px 12px;
+    padding: 12px 16px;
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -129,8 +151,11 @@ header h1 {
     transition: var(--transition);
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 0.8rem;
+    gap: 6px;
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+    min-width: 80px;
+    justify-content: center;
+    touch-action: manipulation;
 }
 
 .difficulty-btn[data-level="easy"] {
@@ -157,26 +182,30 @@ header h1 {
     background-color: var(--correct);
     color: white;
     border: none;
-    padding: 10px 15px;
-    font-size: 0.9rem;
+    padding: 14px 20px;
+    font-size: clamp(0.9rem, 4vw, 1rem);
     border-radius: 50px;
     cursor: pointer;
-    margin: 10px 0;
+    margin: 15px 0;
     transition: var(--transition);
     display: flex;
     align-items: center;
     gap: 8px;
     box-shadow: var(--shadow);
     width: 80%;
-    max-width: 200px;
+    max-width: 220px;
     justify-content: center;
+    touch-action: manipulation;
+    min-height: 50px;
 }
 
-#start-button:hover {
+#start-button:hover, #start-button:focus {
     background-color: #45a049;
     transform: translateY(-2px);
+    outline: none;
 }
 
+/* Instructions */
 #instructions {
     width: 100%;
     margin-top: 15px;
@@ -185,26 +214,29 @@ header h1 {
 .instruction-card {
     background-color: var(--card-bg);
     border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 10px;
     backdrop-filter: blur(5px);
-    font-size: 0.8rem;
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
 }
 
 .instruction-card i {
-    font-size: 0.9rem;
+    font-size: clamp(0.9rem, 4vw, 1rem);
     color: var(--secondary);
+    min-width: 20px;
 }
 
 #show-ranking {
     color: var(--warning);
     text-decoration: underline;
     cursor: pointer;
+    touch-action: manipulation;
 }
 
+/* Game Screen */
 #game-screen,
 #ranking-screen,
 #name-input-screen {
@@ -224,13 +256,15 @@ header h1 {
 .game-counter,
 .game-difficulty {
     background-color: var(--card-bg);
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 6px;
     backdrop-filter: blur(5px);
-    font-size: 0.8rem;
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+    min-width: 60px;
+    justify-content: center;
 }
 
 .game-difficulty.easy {
@@ -264,68 +298,80 @@ header h1 {
     100% { transform: scale(1); }
 }
 
+/* Card Styles */
 .card {
     background-color: var(--card-bg);
     border-radius: 8px;
-    padding: 12px;
+    padding: 15px;
     margin: 12px 0;
     text-align: center;
     backdrop-filter: blur(5px);
 }
 
 #sentence {
-    font-size: 1.2rem;
+    font-size: clamp(1.2rem, 5vw, 1.4rem);
     font-weight: bold;
     margin-bottom: 5px;
     word-break: break-word;
     line-height: 1.4;
+    hyphens: auto;
 }
 
+/* Options Grid */
 .options-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 8px;
-    margin: 12px 0;
+    gap: 10px;
+    margin: 15px 0;
 }
 
 button.option {
     background-color: var(--secondary);
     color: white;
     border: none;
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     cursor: pointer;
     transition: var(--transition);
     text-align: center;
-    font-size: 0.9rem;
-    min-height: 50px;
+    font-size: clamp(0.9rem, 4vw, 1rem);
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation;
+    width: 100%;
 }
 
-button.option:hover {
+button.option:hover, button.option:focus {
     background-color: #2980b9;
     transform: translateY(-2px);
+    outline: none;
 }
 
+button.option:active {
+    transform: translateY(0);
+}
+
+/* Feedback Card */
 .feedback-card {
     background-color: var(--card-bg);
     border-radius: 8px;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 12px;
+    margin: 12px 0;
     backdrop-filter: blur(5px);
-    font-size: 0.8rem;
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+    line-height: 1.4;
 }
 
 .correct {
     color: var(--correct);
-    border-left: 3px solid var(--correct);
+    border-left: 4px solid var(--correct);
 }
 
 .incorrect {
     color: var(--incorrect);
-    border-left: 3px solid var(--incorrect);
+    border-left: 4px solid var(--incorrect);
 }
 
 /* Ranking Screen */
@@ -336,6 +382,7 @@ button.option:hover {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
 }
 
 .tabs {
@@ -344,19 +391,26 @@ button.option:hover {
     margin-bottom: 12px;
     overflow-x: auto;
     padding-bottom: 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .tab-btn {
-    flex: 1;
-    min-width: 60px;
-    padding: 6px 8px;
+    flex: 0 0 auto;
+    min-width: 70px;
+    padding: 8px 10px;
     border: none;
     border-radius: 20px;
     background-color: var(--card-bg);
     color: var(--text-light);
-    font-size: 0.8rem;
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
     cursor: pointer;
     transition: var(--transition);
+    touch-action: manipulation;
 }
 
 .tab-btn.active {
@@ -365,9 +419,21 @@ button.option:hover {
 }
 
 .ranking-list {
-    max-height: 300px;
+    max-height: 50vh;
     overflow-y: auto;
     margin-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary) transparent;
+}
+
+.ranking-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ranking-list::-webkit-scrollbar-thumb {
+    background-color: var(--secondary);
+    border-radius: 3px;
 }
 
 .rank-item {
@@ -375,11 +441,12 @@ button.option:hover {
     grid-template-columns: 40px 1fr 80px 60px;
     gap: 8px;
     align-items: center;
-    padding: 8px 10px;
-    margin-bottom: 6px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
     background-color: var(--card-bg);
     border-radius: 8px;
-    font-size: 0.8rem;
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+    touch-action: manipulation;
 }
 
 .rank-position {
@@ -394,10 +461,11 @@ button.option:hover {
 }
 
 .rank-difficulty {
-    font-size: 0.7rem;
+    font-size: clamp(0.7rem, 3vw, 0.8rem);
     text-align: center;
-    padding: 3px 5px;
+    padding: 4px 6px;
     border-radius: 10px;
+    white-space: nowrap;
 }
 
 .difficulty-easy {
@@ -424,139 +492,189 @@ button.option:hover {
     text-align: center;
     padding: 20px;
     color: rgba(255, 255, 255, 0.7);
+    font-size: clamp(0.9rem, 4vw, 1rem);
 }
 
 /* Name Input Screen */
 #name-input-screen h2 {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
 }
 
 .form-group {
-    margin: 12px 0;
+    margin: 15px 0;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+    margin-bottom: 8px;
+    font-size: clamp(0.9rem, 4vw, 1rem);
 }
 
 .form-group input {
     width: 100%;
-    padding: 8px 12px;
+    padding: 12px 15px;
     border-radius: 8px;
     border: none;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
-    font-size: 1rem;
+    font-size: clamp(1rem, 4vw, 1.1rem);
+    -webkit-appearance: none;
 }
 
 .form-group input::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
 
+.form-group input:focus {
+    outline: 2px solid var(--secondary);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
 .btn-jogar {
     background-color: var(--secondary);
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 14px 15px;
     border-radius: 8px;
     cursor: pointer;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     transition: var(--transition);
-    font-size: 0.9rem;
+    font-size: clamp(0.9rem, 4vw, 1rem);
+    touch-action: manipulation;
+    min-height: 50px;
 }
 
-.btn-jogar:hover {
+.btn-jogar:hover, .btn-jogar:focus {
     background-color: #2980b9;
     transform: translateY(-2px);
+    outline: none;
 }
 
-/* Responsive para telas maiores */
-@media (min-width: 480px) {
+/* Pulse Animation */
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Mobile Specific Enhancements */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        padding-bottom: calc(10px + var(--safe-area-inset-bottom));
+        padding-top: calc(10px + var(--safe-area-inset-top));
+    }
+    
     #game-container {
-        padding: 20px;
+        padding: 12px;
+        border-radius: 10px;
     }
     
-    header h1 {
-        font-size: 1.8rem;
+    .menu-button, .back-to-main {
+        width: 42px;
+        height: 42px;
+        top: 12px;
+        left: 12px;
     }
     
-    .subtitle {
-        font-size: 1rem;
+    .back-to-main {
+        left: auto;
+        right: 12px;
+    }
+    
+    .difficulty-options {
+        gap: 6px;
     }
     
     .difficulty-btn {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    
-    #start-button {
-        padding: 12px 20px;
-        font-size: 1rem;
-    }
-    
-    .instruction-card {
-        padding: 12px;
-        font-size: 0.9rem;
-    }
-    
-    .game-header {
-        gap: 10px;
-    }
-    
-    .game-timer,
-    .game-score,
-    .game-counter,
-    .game-difficulty {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-    }
-    
-    #sentence {
-        font-size: 1.4rem;
+        padding: 10px 12px;
+        min-width: 70px;
     }
     
     .options-grid {
-        gap: 10px;
+        gap: 8px;
     }
     
     button.option {
         padding: 12px;
-        font-size: 1rem;
-        min-height: 60px;
-    }
-    
-    .feedback-card {
-        font-size: 0.9rem;
-    }
-    
-    .tab-btn {
-        font-size: 0.9rem;
+        min-height: 55px;
     }
     
     .rank-item {
-        font-size: 0.9rem;
+        grid-template-columns: 35px 1fr 70px 50px;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .rank-difficulty {
+        font-size: 0.7rem;
+        padding: 3px 5px;
     }
 }
 
+/* Tablet and Desktop Styles */
 @media (min-width: 768px) {
     .options-grid {
         grid-template-columns: 1fr 1fr;
     }
     
     .tabs {
-        gap: 10px;
+        gap: 8px;
     }
     
     .tab-btn {
         min-width: 80px;
-        padding: 8px 12px;
+        padding: 10px 12px;
+    }
+    
+    .rank-item {
+        grid-template-columns: 50px 1fr 100px 70px;
+        padding: 12px 15px;
+    }
+}
+
+/* Large Screens */
+@media (min-width: 1024px) {
+    body {
+        padding: 20px;
+    }
+    
+    #game-container {
+        padding: 25px;
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion) {
+    .pulse, .game-timer.warning, .game-timer.critical {
+        animation: none;
+    }
+    
+    button, .menu-button, .difficulty-btn, .tab-btn {
+        transition: none;
+    }
+}
+
+/* Orientation Specific */
+@media (orientation: landscape) and (max-height: 500px) {
+    #game-container {
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .ranking-list {
+        max-height: 40vh;
     }
 }

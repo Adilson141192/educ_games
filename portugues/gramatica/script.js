@@ -109,7 +109,7 @@ const DOM = {
     scoreText: document.querySelector('#score span'),
     questionCounter: document.querySelector('#question-counter span'),
     feedback: document.getElementById('feedback'),
-    backButton: document.getElementById('back-to-menu'),
+    backButton: document.getElementById('back-button'),
     backToMainButton: document.getElementById('back-to-main'),
     timePerQuestion: document.getElementById('time-per-question'),
     currentLevel: document.getElementById('current-level'),
@@ -129,6 +129,7 @@ function init() {
     setupEventListeners();
     updateDifficultyDisplay();
     loadRanking();
+    checkBackButton();
 }
 
 function setupEventListeners() {
@@ -149,6 +150,29 @@ function setupEventListeners() {
     DOM.tabButtons.forEach(btn => {
         btn.addEventListener('click', () => filterRanking(btn.dataset.level));
     });
+
+    // Melhorias para mobile
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+}
+
+function handleTouchStart() {
+    // Adiciona classe active para feedback visual
+    document.body.classList.add('touch-active');
+}
+
+function handleTouchEnd() {
+    // Remove classe active após um curto período
+    setTimeout(() => {
+        document.body.classList.remove('touch-active');
+    }, 100);
+}
+
+function checkBackButton() {
+    // Verifica se é a página inicial para ocultar o botão de voltar
+    if (window.location.pathname.endsWith('index.html')) {
+        DOM.backButton.classList.add('hidden');
+    }
 }
 
 function setDifficulty(level) {
@@ -231,6 +255,12 @@ function displayQuestion() {
         button.className = 'option';
         button.textContent = option;
         button.addEventListener('click', () => checkAnswer(option === gameState.currentSentence.correct));
+        button.addEventListener('touchstart', () => {
+            button.classList.add('active');
+        });
+        button.addEventListener('touchend', () => {
+            button.classList.remove('active');
+        });
         DOM.options.appendChild(button);
     });
 
