@@ -16,14 +16,23 @@
     --text-light: #7f8c8d;
 }
 
+html, body {
+    overflow-x: hidden; /* Impede rolagem horizontal */
+    height: 100%; /* Garante que o body ocupe toda a altura */
+}
+
 body {
     background-color: #f5f5f5;
     color: var(--text-color);
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da viewport */
+    position: relative;
 }
 
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
@@ -37,6 +46,7 @@ body {
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     position: relative;
+    width: 100%;
 }
 
 .header h1 {
@@ -73,7 +83,9 @@ body {
 /* Main Content */
 .main-content {
     padding: 2rem 0;
-    min-height: calc(100vh - 200px); /* Garante que o footer fique no rodapé */
+    flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
+    width: 100%;
+    overflow-y: auto; /* Permite rolagem vertical apenas se necessário */
 }
 
 .games-grid {
@@ -141,14 +153,32 @@ body {
     text-align: center;
     padding: 1.5rem 0;
     font-size: 0.9rem;
+    width: 100%;
 }
 
 /* Media Queries para mobile */
 @media (max-width: 767px) {
+    html, body {
+        position: fixed; /* Impede qualquer rolagem */
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* Remove completamente a rolagem */
+    }
+    
+    .main-content {
+        overflow-y: auto; /* Permite rolagem apenas no conteúdo principal */
+        -webkit-overflow-scrolling: touch; /* Melhora a rolagem no iOS */
+        padding-bottom: 20px; /* Espaço para o footer */
+    }
+    
     .header {
         padding: 1.5rem 0;
         text-align: left;
         padding-left: 60px;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
     }
     
     .back-button {
@@ -179,6 +209,22 @@ body {
     .header p {
         font-size: 0.9rem;
     }
+    
+    .main-content {
+        margin-top: 90px; /* Compensa o header fixo */
+        height: calc(100% - 90px - 60px); /* Altura total menos header e footer */
+    }
+    
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    .games-grid {
+        margin-bottom: 20px; /* Espaço extra no final para evitar que o footer cubra conteúdo */
+    }
 }
 
 /* Media Queries para tablets */
@@ -194,6 +240,11 @@ body {
 
 /* Media Queries para desktops */
 @media (min-width: 992px) {
+    html, body {
+        position: static;
+        overflow: visible;
+    }
+    
     .games-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -204,5 +255,14 @@ body {
     
     .back-button {
         left: 30px;
+    }
+    
+    .main-content {
+        margin-top: 0;
+        height: auto;
+    }
+    
+    .header, .footer {
+        position: relative;
     }
 }
