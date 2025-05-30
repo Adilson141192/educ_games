@@ -1,138 +1,199 @@
-// Configuração do jogo otimizada para mobile
+/**
+ * Configuração principal do aplicativo
+ * Otimizado para PWA, performance e acessibilidade
+ */
+
+// Configuração de carregamento otimizada
 document.addEventListener('DOMContentLoaded', function() {
-    // Verifica se é um dispositivo touch
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    // Verifica dispositivo touch
+    const isTouchDevice = 'ontouchstart' in window || 
+                         navigator.maxTouchPoints > 0 || 
+                         navigator.msMaxTouchPoints > 0;
     
     // Adiciona classe ao body para estilos específicos
-    if (isTouchDevice) {
-        document.body.classList.add('touch-device');
-    } else {
-        document.body.classList.add('no-touch-device');
-    }
+    document.body.classList.add(isTouchDevice ? 'touch-device' : 'no-touch-device');
     
-    // Previne o comportamento padrão de toque
-    document.addEventListener('touchstart', function(e) {
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
-    }, { passive: false });
+    // Configurações iniciais
+    setupTouchFeedback();
+    setupViewport();
+    setupServiceWorker();
+    setupInstallPrompt();
+    setupNetworkStatus();
+    setupAnimations();
+    setupAccessibility();
     
-    // Adiciona feedback tátil para botões
-    const buttons = document.querySelectorAll('button, a[href]');
-    buttons.forEach(button => {
-        button.addEventListener('touchstart', function() {
+    // Foco no conteúdo principal para acessibilidade
+    document.getElementById('main-content').setAttribute('tabindex', '-1');
+    document.getElementById('main-content').focus();
+});
+
+// Configura feedback tátil para interações
+function setupTouchFeedback() {
+    const interactiveElements = document.querySelectorAll('button, a[href], .game-card');
+    
+    interactiveElements.forEach(el => {
+        // Feedback visual para toque
+        el.addEventListener('touchstart', function() {
             this.classList.add('active');
         }, { passive: true });
         
-        button.addEventListener('touchend', function() {
+        el.addEventListener('touchend', function() {
             this.classList.remove('active');
         }, { passive: true });
+        
+        // Previne o comportamento padrão de toque
+        el.addEventListener('touchstart', function(e) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                e.preventDefault();
+            }
+        }, { passive: false });
     });
     
-    // Carrega os recursos após o DOM estar pronto
-    loadResources();
-});
+    // Previne double tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
+}
 
-function loadResources() {
-    // Verifica se a API de armazenamento está disponível
-    if ('storage' in navigator && 'estimate' in navigator.storage) {
-        navigator.storage.estimate().then(estimate => {
-            console.log(`Espaço usado: ${estimate.usage}`);
-            console.log(`Espaço disponível: ${estimate.quota}`);
-        });
-    }
-    
-    // Verifica se o service worker é suportado
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').then(registration => {
-                console.log('ServiceWorker registrado com sucesso: ', registration.scope);
-            }).catch(err => {
-                console.log('Falha no registro do ServiceWorker: ', err);
-            });
-        });
-    }
-    
-    // Verifica se está em modo standalone (PWA)
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('Executando como PWA');
-    }
-    
-    // Configura o viewport para dispositivos móveis
+// Configura viewport responsivo
+function setupViewport() {
     const setViewport = () => {
         const viewport = document.querySelector('meta[name="viewport"]');
-        if (window.orientation === 90 || window.orientation === -90) {
-            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
-        } else {
-            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
-        }
+        const content = window.orientation === 90 || window.orientation === -90 ?
+            'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' :
+            'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0';
+        
+        viewport.setAttribute('content', content);
     };
     
     window.addEventListener('orientationchange', setViewport, false);
     setViewport();
+}
+
+// Registra Service Worker para PWA
+function setupServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registrado com sucesso:', registration.scope);
+                    
+                    // Verifica atualizações periodicamente
+                    setInterval(() => registration.update(), 60 * 60 * 1000);
+                })
+                .catch(err => {
+                    console.error('Falha no registro do ServiceWorker:', err);
+                });
+        });
+    }
     
-    // Adiciona listener para o evento beforeinstallprompt
+    // Verifica modo standalone PWA
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        document.body.classList.add('standalone-mode');
+    }
+}
+
+// Configura prompt de instalação PWA
+function setupInstallPrompt() {
     let deferredPrompt;
+    
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
         console.log('Evento beforeinstallprompt disparado');
+        
+        // Pode adicionar um botão de instalação aqui se desejar
     });
     
-    // Verifica a conexão
+    // Exemplo de como disparar o prompt de instalação
+    window.installPWA = () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação');
+                }
+                deferredPrompt = null;
+            });
+        }
+    };
+}
+
+// Monitora status da conexão
+function setupNetworkStatus() {
     const updateOnlineStatus = () => {
         if (navigator.onLine) {
-            console.log('Online');
+            document.body.classList.remove('offline');
+            document.body.classList.add('online');
         } else {
-            console.log('Offline');
+            document.body.classList.remove('online');
+            document.body.classList.add('offline');
+            // Pode adicionar uma notificação de offline aqui
         }
     };
     
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
     updateOnlineStatus();
-    
-    // Otimiza animações para mobile
-    const optimizeAnimations = () => {
-        if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.game-card').forEach(card => {
-                observer.observe(card);
+}
+
+// Otimiza animações para performance
+function setupAnimations() {
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    observer.unobserve(entry.target);
+                }
             });
-        }
-    };
-    
-    optimizeAnimations();
-    
-    // Adiciona feedback visual para toques
-    document.addEventListener('touchstart', function() {}, { passive: true });
-    
-    // Previne o double tap zoom
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function(event) {
-        const now = (new Date()).getTime();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, { passive: false });
-    
-    // Melhora o desempenho de rolagem
-    if ('scrollBehavior' in document.documentElement.style) {
-        console.log('Scroll behavior suportado');
-    } else {
-        // Polyfill para smooth scroll se necessário
+        }, { 
+            threshold: 0.1,
+            rootMargin: '0px 0px 50px 0px'
+        });
+        
+        document.querySelectorAll('.game-card').forEach(card => {
+            observer.observe(card);
+        });
     }
 }
 
-document.querySelector('.back-button').addEventListener('click', function(e) {
+// Melhorias de acessibilidade
+function setupAccessibility() {
+    // Adiciona rótulos ARIA dinâmicos se necessário
+    document.querySelectorAll('.game-card').forEach(card => {
+        const title = card.querySelector('h2').textContent;
+        const desc = card.querySelector('p').textContent;
+        card.setAttribute('aria-label', `${title} - ${desc}`);
+    });
+    
+    // Configura navegação por teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            document.body.classList.add('keyboard-navigation');
+        }
+    });
+    
+    document.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-navigation');
+    });
+}
+
+// Configura o botão de voltar
+document.querySelector('.back-button')?.addEventListener('click', function(e) {
     e.preventDefault();
     window.location.href = this.getAttribute('href');
 });
+
+// Verifica armazenamento disponível
+if ('storage' in navigator && 'estimate' in navigator.storage) {
+    navigator.storage.estimate().then(estimate => {
+        console.log(`Uso de armazenamento: ${(estimate.usage / 1024 / 1024).toFixed(2)} MB`);
+        console.log(`Cota disponível: ${(estimate.quota / 1024 / 1024).toFixed(2)} MB`);
+    });
+}

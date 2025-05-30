@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Jogos educativos de língua portuguesa para preparação para o SAEB">
     <title>Jogos de Português - SAEB</title>
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="style.css">
@@ -11,25 +12,26 @@
     <meta name="theme-color" content="#2c3e50">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <a href="../index.html" class="back-button" aria-label="Voltar">
-    <i class="fas fa-arrow-left"></i>
-</a>
+            <a href="../index.html" class="back-button" aria-label="Voltar para a página inicial">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
             <h1>Jogos de Português</h1>
             <p>Pratique sua língua portuguesa de forma divertida!</p>
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <div class="container">
             <div class="games-grid">
                 <!-- Desafio Ortográfico -->
-                <a href="ortografico/index.html" class="game-card" aria-label="Desafio Ortográfico">
+                <a href="ortografico/index.html" class="game-card" aria-label="Desafio Ortográfico - Escolha a grafia correta das palavras">
                     <div class="card-icon">
-                        <i class="fas fa-spell-check"></i>
+                        <i class="fas fa-spell-check" aria-hidden="true"></i>
                     </div>
                     <h2>Desafio Ortográfico</h2>
                     <p>Escolha a grafia correta das palavras</p>
@@ -37,9 +39,9 @@
                 </a>
 
                 <!-- Interpretação de Texto -->
-                <a href="interpretacao/index.html" class="game-card" aria-label="Interpretação de Texto">
+                <a href="interpretacao/index.html" class="game-card" aria-label="Interpretação de Texto - Leia e responda perguntas sobre textos">
                     <div class="card-icon">
-                        <i class="fas fa-book-reader"></i>
+                        <i class="fas fa-book-reader" aria-hidden="true"></i>
                     </div>
                     <h2>Interpretação de Texto</h2>
                     <p>Leia e responda perguntas sobre textos</p>
@@ -47,9 +49,9 @@
                 </a>
 
                 <!-- Resgate Gramatical -->
-                <a href="gramatica/index.html" class="game-card" aria-label="Resgate Gramatical">
+                <a href="gramatica/index.html" class="game-card" aria-label="Resgate Gramatical - Identifique e corrija erros gramaticais">
                     <div class="card-icon">
-                        <i class="fas fa-spell-check"></i>
+                        <i class="fas fa-spell-check" aria-hidden="true"></i>
                     </div>
                     <h2>Resgate Gramatical</h2>
                     <p>Identifique e corrija erros gramaticais</p>
@@ -57,9 +59,9 @@
                 </a>
 
                 <!-- SAEB Português -->
-                <a href="saeb/index.html" class="game-card" aria-label="SAEB Português">
+                <a href="saeb/index.html" class="game-card" aria-label="SAEB Português - Questões reais das provas do SAEB">
                     <div class="card-icon">
-                        <i class="fas fa-graduation-cap"></i>
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i>
                     </div>
                     <h2>SAEB Português</h2>
                     <p>Questões reais das provas do SAEB</p>
@@ -76,6 +78,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
