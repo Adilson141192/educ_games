@@ -1,11 +1,4 @@
 /* Reset e estilos base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 :root {
     --primary-color: #3498db;
     --secondary-color: #2ecc71;
@@ -14,12 +7,27 @@
     --light-color: #ecf0f1;
     --text-color: #333;
     --text-light: #7f8c8d;
+    --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 6px 12px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+    --border-radius: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f5f5;
     color: var(--text-color);
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -35,11 +43,11 @@ body {
     color: white;
     padding: 2rem 0;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
 }
 
 .header h1 {
-    font-size: 1.8rem;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
     margin-bottom: 0.5rem;
 }
 
@@ -51,6 +59,7 @@ body {
 /* Main Content */
 .main-content {
     padding: 2rem 0;
+    flex: 1;
 }
 
 .disciplines-grid {
@@ -62,21 +71,31 @@ body {
 
 .discipline-card {
     background-color: white;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 1.5rem;
     text-align: center;
     text-decoration: none;
     color: var(--text-color);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
     display: block;
     position: relative;
     overflow: hidden;
+    border-top: 4px solid;
+}
+
+.discipline-card:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
 }
 
 .discipline-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: var(--shadow-lg);
+}
+
+.discipline-card:active {
+    transform: translateY(-2px);
 }
 
 .card-icon {
@@ -103,24 +122,25 @@ body {
     padding: 0.5rem 1.5rem;
     border-radius: 20px;
     font-weight: 600;
-    transition: background-color 0.3s ease;
+    transition: var(--transition);
 }
 
-.discipline-card:hover .btn-jogar {
+.discipline-card:hover .btn-jogar,
+.discipline-card:focus .btn-jogar {
     background-color: var(--dark-color);
 }
 
 /* Cores específicas para cada disciplina */
 #portugues {
-    border-top: 4px solid #3498db;
+    border-top-color: var(--primary-color);
 }
 
 #matematica {
-    border-top: 4px solid #e74c3c;
+    border-top-color: var(--accent-color);
 }
 
 #ingles {
-    border-top: 4px solid #2ecc71;
+    border-top-color: var(--secondary-color);
 }
 
 /* Footer */
@@ -129,7 +149,7 @@ body {
     color: white;
     text-align: center;
     padding: 1.5rem 0;
-    margin-top: 2rem;
+    margin-top: auto;
     font-size: 0.9rem;
 }
 
@@ -137,30 +157,20 @@ body {
     margin-bottom: 0.5rem;
 }
 
-/* Media Queries para tablets */
+/* Media Queries */
 @media (min-width: 768px) {
     .disciplines-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    .header h1 {
-        font-size: 2.2rem;
-    }
 }
 
-/* Media Queries para desktops */
 @media (min-width: 992px) {
     .disciplines-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-    
-    .header h1 {
-        font-size: 2.5rem;
-    }
 }
 
-/* Estilos adicionais para a página de matemática */
-
+/* Estilos para páginas internas (comuns) */
 .back-button {
     color: white;
     font-size: 1.2rem;
@@ -176,20 +186,11 @@ body {
     height: 40px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.2);
-    transition: background-color 0.3s ease;
+    transition: var(--transition);
 }
 
 .back-button:hover {
     background-color: rgba(255, 255, 255, 0.3);
-}
-
-@media (min-width: 480px) {
-    .back-button {
-        font-size: 1.5rem;
-        left: 1rem;
-        top: 1.5rem;
-        transform: none;
-    }
 }
 
 .games-grid {
@@ -201,20 +202,20 @@ body {
 
 .game-card {
     background-color: white;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 1.5rem;
     text-align: center;
     text-decoration: none;
     color: var(--text-color);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
     display: block;
     position: relative;
 }
 
 .game-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: var(--shadow-lg);
 }
 
 .coming-soon {
@@ -227,26 +228,11 @@ body {
     background-color: var(--text-light);
 }
 
-/* Cores específicas para matemática */
+/* Temas específicos */
 .math-theme {
     --primary-color: #e74c3c;
 }
 
-/* Media Queries para tablets */
-@media (min-width: 768px) {
-    .games-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Media Queries para desktops */
-@media (min-width: 992px) {
-    .games-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Estilos específicos para a página de inglês */
 .english-theme {
     --primary-color: #2ecc71;
     --secondary-color: #27ae60;
@@ -256,19 +242,16 @@ body {
     border-top: 4px solid var(--primary-color);
 }
 
-/* Ajustes para os cards em inglês */
-.game-card h2 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+/* Media Queries para páginas internas */
+@media (min-width: 480px) {
+    .back-button {
+        font-size: 1.5rem;
+        left: 1rem;
+        top: 1.5rem;
+        transform: none;
+    }
 }
 
-.game-card p {
-    font-size: 0.9rem;
-    min-height: 40px;
-    margin-bottom: 1rem;
-}
-
-/* Melhorias para grid com 4 itens */
 @media (min-width: 768px) {
     .games-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -277,6 +260,10 @@ body {
 
 @media (min-width: 992px) {
     .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .english-theme .games-grid {
         grid-template-columns: repeat(4, 1fr);
     }
     
