@@ -1,0 +1,191 @@
+/* Estilos específicos para o jogo de gramática */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --correct: #4CAF50;
+    --incorrect: #f44336;
+    --warning: #ff9800;
+}
+
+#game-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Tela de início */
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+#start-button {
+    margin: 20px 0;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+}
+
+#start-button.pulse {
+    animation: pulse 2s infinite;
+}
+
+#instructions {
+    width: 100%;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.instruction-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.95rem;
+}
+
+.instruction-card i {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+/* Tela do jogo */
+#game-screen {
+    display: none;
+    width: 100%;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.game-timer, .game-score {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.game-timer.warning {
+    color: var(--warning);
+    animation: pulse 1s infinite;
+}
+
+/* Cartão da frase */
+#sentence-container {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#sentence {
+    font-size: 1.4rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* Opções */
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.options-grid button {
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.options-grid button:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+}
+
+/* Feedback */
+.feedback-card {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    font-size: 1rem;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.feedback-card.correct {
+    background-color: rgba(76, 175, 80, 0.2);
+    border-left: 4px solid var(--correct);
+    color: var(--correct);
+}
+
+.feedback-card.incorrect {
+    background-color: rgba(244, 67, 54, 0.2);
+    border-left: 4px solid var(--incorrect);
+    color: var(--incorrect);
+}
+
+/* Animações */
+.emoji-animation {
+    position: absolute;
+    font-size: 2.5rem;
+    animation: floatUp 1s forwards;
+    z-index: 100;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Media Queries */
+@media (min-width: 600px) {
+    #instructions {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    #sentence {
+        font-size: 1.6rem;
+    }
+}
+
+@media (min-width: 768px) {
+    #sentence {
+        font-size: 1.8rem;
+    }
+    
+    .options-grid button {
+        font-size: 1.1rem;
+    }
+}

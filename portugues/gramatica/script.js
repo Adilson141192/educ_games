@@ -23,6 +23,12 @@ const FALLBACK_SENTENCES = [
         correct: "Vou te emprestar o livro.",
         explanation: "'Emprestar' significa dar emprestado, não pegar emprestado.",
         difficulty: "medium"
+    },
+    {
+        sentence: "Fazem dois anos que não o vejo.",
+        correct: "Faz dois anos que não o vejo.",
+        explanation: "Verbo 'fazer' (tempo decorrido) é impessoal - use apenas 3ª pessoa do singular.",
+        difficulty: "hard"
     }
 ];
 
@@ -33,7 +39,8 @@ const gameState = {
     score: 0,
     timeLeft: 30,
     timer: null,
-    isActive: false
+    isActive: false,
+    soundEnabled: true
 };
 
 // Elementos DOM
@@ -47,20 +54,34 @@ const DOM = {
     timerText: document.querySelector('#timer span'),
     score: document.querySelector('#score span'),
     feedback: document.getElementById('feedback'),
-    animationContainer: document.getElementById('animation-container')
+    animationContainer: document.getElementById('animation-container'),
+    backButton: document.querySelector('.back-button')
+};
+
+// Sons
+const sounds = {
+    correct: new Audio('../../assets/sounds/correct.mp3'),
+    wrong: new Audio('../../assets/sounds/wrong.mp3'),
+    timer: new Audio('../../assets/sounds/timer.mp3')
 };
 
 // Inicialização
 function init() {
     DOM.startButton.addEventListener('click', startGame);
-    document.getElementById('back-to-menu').addEventListener('click', () => {
-    window.location.href = '../../index.html';
+    DOM.backButton.addEventListener('click', () => {
+        if (gameState.isActive) {
+            endGame();
+        }
+    });
+    
+    // Configura sons
+    Object.values(sounds).forEach(sound => {
+        sound.volume = 0.5;
     });
 }
 
 // Fluxo do jogo
 function startGame() {
-    // Transição entre telas
     DOM.startScreen.style.animation = 'fadeOut 0.5s forwards';
     
     setTimeout(() => {
@@ -90,6 +111,10 @@ function startTimer() {
     gameState.timer = setInterval(() => {
         gameState.timeLeft--;
         updateTimerDisplay();
+        
+        if (gameState.timeLeft <= 5 && gameState.timeLeft > 0) {
+            if (gameState.soundEnabled) sounds.timer.play();
+        }
         
         if (gameState.timeLeft <= 0) {
             endGame();
@@ -153,7 +178,9 @@ function generateWrongOption(correct) {
     const commonMistakes = {
         "Houve muitos problemas na festa.": "Haviam muitos problemas na festa.",
         "Ele assistiu ao jogo na TV.": "Ele assistiu o jogo na televisão.",
-        "A maioria dos alunos faltou à prova.": "A maioria dos alunos faltaram a prova."
+        "A maioria dos alunos faltou à prova.": "A maioria dos alunos faltaram a prova.",
+        "Vou te emprestar o livro.": "Vou emprestar seu livro para você.",
+        "Faz dois anos que não o vejo.": "Fazem dois anos que não o vejo."
     };
     
     return commonMistakes[correct] || correct.replace(/\b(a|o)\b/g, match => 
@@ -180,11 +207,13 @@ function handleCorrect() {
     updateScore();
     showFeedback(`✅ Correto! ${gameState.currentSentence.explanation}`, 'correct');
     createAnimation('🎉', '#4CAF50');
+    if (gameState.soundEnabled) sounds.correct.play();
 }
 
 function handleIncorrect() {
     showFeedback(`❌ Errado! O correto é: "${gameState.currentSentence.correct}". ${gameState.currentSentence.explanation}`, 'incorrect');
     createAnimation('💥', '#f44336');
+    if (gameState.soundEnabled) sounds.wrong.play();
 }
 
 function createAnimation(emoji, color) {
@@ -215,14 +244,14 @@ function endGame() {
 }
 
 function showFinalResults() {
-    DOM.sentence.textContent = `Fim de jogo! Pontuação: ${gameState.score}/${gameState.sentences.length}`;
+    DOM.sentence.textContent = `Fim de jogo! Pontuação: ${gameState.score}`;
     DOM.options.innerHTML = '';
     
     const percentage = (gameState.score / gameState.sentences.length) * 100;
     let message, className;
     
     if (percentage >= 90) {
-        message = '🎉 Excelente! Domínio total!';
+        message = '🎉 Excelente! Domínio total da gramática!';
         className = 'correct';
     } else if (percentage >= 60) {
         message = '👍 Bom trabalho! Continue praticando!';
@@ -238,14 +267,15 @@ function showFinalResults() {
 
 function createRestartButton() {
     const button = document.createElement('button');
-    button.className = 'restart';
-    button.textContent = 'Jogar Novamente';
+    button.className = 'btn-jogar restart';
+    button.innerHTML = '<i class="fas fa-redo"></i> Jogar Novamente';
     button.addEventListener('click', () => {
         DOM.gameScreen.style.animation = 'fadeOut 0.5s forwards';
         setTimeout(() => {
             DOM.gameScreen.style.display = 'none';
             DOM.startScreen.style.display = 'flex';
             DOM.startScreen.style.animation = 'fadeIn 0.5s forwards';
+            resetGame();
         }, 500);
     });
     
@@ -259,16 +289,20 @@ function updateScore() {
 
 function showFeedback(message, type) {
     DOM.feedback.textContent = message;
-    DOM.feedback.className = type;
+    DOM.feedback.className = `feedback-card ${type}`;
 }
 
 function clearFeedback() {
     DOM.feedback.textContent = '';
-    DOM.feedback.className = '';
+    DOM.feedback.className = 'feedback-card';
 }
 
 function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 // Iniciar o jogo

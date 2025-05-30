@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resgate Gramatical - Português | SAEB</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="portugues-theme">
+    <header class="header">
+        <div class="container">
+            <a href="../../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Resgate Gramatical</h1>
+            <p>Encontre e corrija o erro em cada frase!</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="game-container">
+                <div id="start-screen">
+                    <button id="start-button" class="btn-jogar pulse">
+                        <i class="fas fa-play"></i> Iniciar Jogo
+                    </button>
+                    
+                    <div id="instructions">
+                        <div class="instruction-card">
+                            <i class="fas fa-clock"></i>
+                            <p>30 segundos para acertar o máximo!</p>
+                        </div>
+                        <div class="instruction-card">
+                            <i class="fas fa-lightbulb"></i>
+                            <p>Selecione a versão correta da frase</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="game-screen" style="display:none">
+                    <div class="game-header">
+                        <div id="timer" class="game-timer">
+                            <i class="fas fa-clock"></i> <span>30s</span>
+                        </div>
+                        <div id="score" class="game-score">
+                            <i class="fas fa-star"></i> <span>0</span>
+                        </div>
+                    </div>
+
+                    <div id="sentence-container" class="game-card">
+                        <div id="sentence">Carregando...</div>
+                    </div>
+                    
+                    <div id="options" class="options-grid">
+                        <!-- Opções serão preenchidas via JavaScript -->
+                    </div>
+                    
+                    <div id="feedback" class="feedback-card"></div>
+                    <div id="animation-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Adilson L. S. Junior para a Escola Municipal Liceu Ribamarense</p>
+            <p>© 2025 Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
