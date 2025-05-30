@@ -1,309 +1,430 @@
-// Configuração do jogo
-const FALLBACK_SENTENCES = [
-    {
-        sentence: "Houveram muitos problemas na festa.",
-        correct: "Houve muitos problemas na festa.",
-        explanation: "Verbo 'haver' (existir) é impessoal - use apenas 3ª pessoa do singular.",
-        difficulty: "medium"
+const GAME_CONFIG = {
+    totalQuestions: 5,
+    timePerQuestion: {
+        easy: 40,
+        medium: 30,
+        hard: 20
     },
-    {
-        sentence: "Ele assistiu o jogo na TV.",
-        correct: "Ele assistiu ao jogo na TV.",
-        explanation: "Regência verbal: 'assistir a' é obrigatório.",
-        difficulty: "easy"
-    },
-    {
-        sentence: "A maioria dos alunos faltaram à prova.",
-        correct: "A maioria dos alunos faltou à prova.",
-        explanation: "Concordância: verbo concorda com 'maioria' (singular).",
-        difficulty: "hard"
-    },
-    {
-        sentence: "Vou emprestar seu livro para você.",
-        correct: "Vou te emprestar o livro.",
-        explanation: "'Emprestar' significa dar emprestado, não pegar emprestado.",
-        difficulty: "medium"
-    },
-    {
-        sentence: "Fazem dois anos que não o vejo.",
-        correct: "Faz dois anos que não o vejo.",
-        explanation: "Verbo 'fazer' (tempo decorrido) é impessoal - use apenas 3ª pessoa do singular.",
-        difficulty: "hard"
-    }
-];
-
-// Estado do jogo
-const gameState = {
-    sentences: [...FALLBACK_SENTENCES],
-    currentSentence: null,
-    score: 0,
-    timeLeft: 30,
-    timer: null,
-    isActive: false,
-    soundEnabled: true
+    answerDelay: 2000
 };
 
-// Elementos DOM
+const SENTENCES = {
+    easy: [
+        {
+            sentence: "Ele assistiu o jogo na TV.",
+            correct: "Ele assistiu ao jogo na TV.",
+            explanation: "Regência verbal: 'assistir a' é obrigatório.",
+            options: [
+                "Ele assistiu ao jogo na TV.",
+                "Ele assistiu o jogo na televisão.",
+                "Ele assistiu o jogo na TV.",
+                "Ele assistiu à jogo na TV."
+            ]
+        },
+        {
+            sentence: "Vou emprestar seu livro para você.",
+            correct: "Vou te emprestar o livro.",
+            explanation: "'Emprestar' significa dar emprestado, não pegar emprestado.",
+            options: [
+                "Vou te emprestar o livro.",
+                "Vou emprestar seu livro para você.",
+                "Vou emprestar o livro para você.",
+                "Vou te emprestar seu livro."
+            ]
+        }
+    ],
+    medium: [
+        {
+            sentence: "Houveram muitos problemas na festa.",
+            correct: "Houve muitos problemas na festa.",
+            explanation: "Verbo 'haver' (existir) é impessoal - use apenas 3ª pessoa do singular.",
+            options: [
+                "Houve muitos problemas na festa.",
+                "Haviam muitos problemas na festa.",
+                "Houveram muitos problemas na festa.",
+                "Houve muitos problema na festa."
+            ]
+        },
+        {
+            sentence: "Fazem dois anos que não o vejo.",
+            correct: "Faz dois anos que não o vejo.",
+            explanation: "Verbo 'fazer' (tempo decorrido) é impessoal - use apenas 3ª pessoa do singular.",
+            options: [
+                "Faz dois anos que não o vejo.",
+                "Fazem dois anos que não o vejo.",
+                "Faz dois anos que não vejo ele.",
+                "Faz dois anos que não o vê."
+            ]
+        }
+    ],
+    hard: [
+        {
+            sentence: "A maioria dos alunos faltaram à prova.",
+            correct: "A maioria dos alunos faltou à prova.",
+            explanation: "Concordância: verbo concorda com 'maioria' (singular).",
+            options: [
+                "A maioria dos alunos faltou à prova.",
+                "A maioria dos alunos faltaram a prova.",
+                "A maioria dos alunos faltaram à prova.",
+                "A maioria de alunos faltou à prova."
+            ]
+        },
+        {
+            sentence: "Os livro está na mesa.",
+            correct: "O livro está na mesa.",
+            explanation: "Concordância: artigo deve concordar em número com o substantivo.",
+            options: [
+                "O livro está na mesa.",
+                "Os livro está na mesa.",
+                "O livros está na mesa.",
+                "Os livros está na mesa."
+            ]
+        }
+    ]
+};
+
+const gameState = {
+    currentQuestion: 0,
+    score: 0,
+    timer: null,
+    timeLeft: 0,
+    currentDifficulty: 'easy',
+    isPlaying: false,
+    currentSentence: null,
+    usedSentences: { easy: [], medium: [], hard: [] }
+};
+
+const ranking = JSON.parse(localStorage.getItem('grammarRanking')) || [];
+
 const DOM = {
     startScreen: document.getElementById('start-screen'),
     gameScreen: document.getElementById('game-screen'),
+    rankingScreen: document.getElementById('ranking-screen'),
+    nameInputScreen: document.getElementById('name-input-screen'),
     startButton: document.getElementById('start-button'),
+    difficultyButtons: document.querySelectorAll('.difficulty-btn'),
     sentence: document.getElementById('sentence'),
     options: document.getElementById('options'),
-    timer: document.getElementById('timer'),
     timerText: document.querySelector('#timer span'),
-    score: document.querySelector('#score span'),
+    scoreText: document.querySelector('#score span'),
+    questionCounter: document.querySelector('#question-counter span'),
     feedback: document.getElementById('feedback'),
-    animationContainer: document.getElementById('animation-container'),
-    backButton: document.querySelector('.back-button')
+    backButton: document.getElementById('back-to-menu'),
+    backToMainButton: document.getElementById('back-to-main'),
+    timePerQuestion: document.getElementById('time-per-question'),
+    currentLevel: document.getElementById('current-level'),
+    showRanking: document.getElementById('show-ranking'),
+    rankingList: document.getElementById('ranking-list'),
+    rankingTabs: document.getElementById('ranking-tabs'),
+    tabButtons: document.querySelectorAll('.tab-btn'),
+    backToStart: document.getElementById('back-to-start'),
+    finalScore: document.getElementById('final-score'),
+    finalDifficulty: document.getElementById('final-difficulty'),
+    playerName: document.getElementById('player-name'),
+    saveScore: document.getElementById('save-score'),
+    difficultyIndicator: document.getElementById('difficulty-indicator')
 };
 
-// Sons
-const sounds = {
-    correct: new Audio('../../assets/sounds/correct.mp3'),
-    wrong: new Audio('../../assets/sounds/wrong.mp3'),
-    timer: new Audio('../../assets/sounds/timer.mp3')
-};
-
-// Inicialização
 function init() {
+    setupEventListeners();
+    updateDifficultyDisplay();
+    loadRanking();
+}
+
+function setupEventListeners() {
     DOM.startButton.addEventListener('click', startGame);
-    DOM.backButton.addEventListener('click', () => {
-        if (gameState.isActive) {
-            endGame();
-        }
+    DOM.backButton.addEventListener('click', returnToMenu);
+    DOM.backToMainButton.addEventListener('click', () => {
+        window.location.href = '../../../index.html';
     });
     
-    // Configura sons
-    Object.values(sounds).forEach(sound => {
-        sound.volume = 0.5;
+    DOM.difficultyButtons.forEach(btn => {
+        btn.addEventListener('click', () => setDifficulty(btn.dataset.level));
+    });
+    
+    DOM.showRanking.addEventListener('click', showRanking);
+    DOM.backToStart.addEventListener('click', returnToStart);
+    DOM.saveScore.addEventListener('click', savePlayerScore);
+    
+    DOM.tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => filterRanking(btn.dataset.level));
     });
 }
 
-// Fluxo do jogo
-function startGame() {
-    DOM.startScreen.style.animation = 'fadeOut 0.5s forwards';
+function setDifficulty(level) {
+    gameState.currentDifficulty = level;
+    DOM.difficultyButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.level === level);
+    });
     
-    setTimeout(() => {
-        DOM.startScreen.style.display = 'none';
-        DOM.gameScreen.style.display = 'block';
-        DOM.gameScreen.style.animation = 'fadeIn 0.5s forwards';
-        
-        resetGame();
-        loadNextSentence();
-        startTimer();
-    }, 500);
+    DOM.timePerQuestion.textContent = `${GAME_CONFIG.timePerQuestion[level]}s`;
+    DOM.currentLevel.textContent = 
+        level === 'easy' ? 'Fácil' : 
+        level === 'medium' ? 'Médio' : 'Difícil';
+    
+    updateDifficultyDisplay();
+}
+
+function updateDifficultyDisplay() {
+    const levelName = 
+        gameState.currentDifficulty === 'easy' ? 'Fácil' : 
+        gameState.currentDifficulty === 'medium' ? 'Médio' : 'Difícil';
+    
+    DOM.difficultyIndicator.className = `game-difficulty ${gameState.currentDifficulty}`;
+    DOM.difficultyIndicator.innerHTML = `<i class="fas fa-chart-line"></i> <span>${levelName}</span>`;
+}
+
+function startGame() {
+    DOM.startScreen.style.display = 'none';
+    DOM.gameScreen.style.display = 'block';
+    DOM.backButton.classList.remove('hidden');
+    DOM.backToMainButton.classList.add('hidden');
+
+    resetGame();
+    loadQuestion();
 }
 
 function resetGame() {
+    gameState.currentQuestion = 0;
     gameState.score = 0;
-    gameState.timeLeft = 30;
-    gameState.isActive = true;
+    gameState.timeLeft = GAME_CONFIG.timePerQuestion[gameState.currentDifficulty];
+    gameState.isPlaying = true;
+    gameState.usedSentences = { easy: [], medium: [], hard: [] };
     
     updateScore();
-    updateTimerDisplay();
-    clearFeedback();
+    updateQuestionCounter();
 }
 
-// Temporizador
-function startTimer() {
+function loadQuestion() {
+    if (gameState.currentQuestion >= GAME_CONFIG.totalQuestions) {
+        endGame();
+        return;
+    }
+
+    DOM.sentence.textContent = "Carregando frase...";
+    DOM.options.innerHTML = '';
+
+    const availableSentences = SENTENCES[gameState.currentDifficulty].filter(s => 
+        !gameState.usedSentences[gameState.currentDifficulty].includes(s.sentence)
+    );
+
+    if (availableSentences.length === 0) {
+        gameState.usedSentences[gameState.currentDifficulty] = [];
+        loadQuestion();
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableSentences.length);
+    gameState.currentSentence = availableSentences[randomIndex];
+    gameState.usedSentences[gameState.currentDifficulty].push(gameState.currentSentence.sentence);
+    
+    displayQuestion();
+    startTimer();
+}
+
+function displayQuestion() {
+    DOM.sentence.textContent = gameState.currentSentence.sentence;
+    DOM.options.innerHTML = '';
+
+    gameState.currentSentence.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option';
+        button.textContent = option;
+        button.addEventListener('click', () => checkAnswer(option === gameState.currentSentence.correct));
+        DOM.options.appendChild(button);
+    });
+
+    updateQuestionCounter();
+    DOM.feedback.textContent = '';
+}
+
+function checkAnswer(isCorrect) {
+    if (!gameState.isPlaying) return;
+
+    gameState.isPlaying = false;
     clearInterval(gameState.timer);
+
+    if (isCorrect) {
+        const timeBonus = Math.floor(gameState.timeLeft / 5);
+        gameState.score += 1 + timeBonus;
+        updateScore();
+        DOM.feedback.textContent = `Correto! +${timeBonus} bônus! ${gameState.currentSentence.explanation}`;
+        DOM.feedback.className = "feedback-card correct";
+    } else {
+        DOM.feedback.textContent = `Incorreto! O correto é: "${gameState.currentSentence.correct}". ${gameState.currentSentence.explanation}`;
+        DOM.feedback.className = "feedback-card incorrect";
+    }
+
+    setTimeout(() => {
+        gameState.currentQuestion++;
+        gameState.isPlaying = true;
+        loadQuestion();
+    }, GAME_CONFIG.answerDelay);
+}
+
+function startTimer() {
+    gameState.timeLeft = GAME_CONFIG.timePerQuestion[gameState.currentDifficulty];
+    DOM.timerText.textContent = gameState.timeLeft;
+
     gameState.timer = setInterval(() => {
         gameState.timeLeft--;
-        updateTimerDisplay();
+        DOM.timerText.textContent = gameState.timeLeft;
+
+        const timerElement = document.getElementById('timer');
+        timerElement.className = 'game-timer';
         
-        if (gameState.timeLeft <= 5 && gameState.timeLeft > 0) {
-            if (gameState.soundEnabled) sounds.timer.play();
+        if (gameState.timeLeft <= 10) {
+            timerElement.classList.add('warning');
         }
-        
+        if (gameState.timeLeft <= 5) {
+            timerElement.classList.remove('warning');
+            timerElement.classList.add('critical');
+        }
+
         if (gameState.timeLeft <= 0) {
-            endGame();
+            clearInterval(gameState.timer);
+            timeOut();
         }
     }, 1000);
 }
 
-function updateTimerDisplay() {
-    DOM.timerText.textContent = `${gameState.timeLeft}s`;
-    
-    if (gameState.timeLeft <= 10) {
-        DOM.timer.classList.add('warning');
-    } else {
-        DOM.timer.classList.remove('warning');
+function clearTimer() {
+    if (gameState.timer) {
+        clearInterval(gameState.timer);
+        gameState.timer = null;
     }
 }
 
-// Gerenciamento de frases
-function loadNextSentence() {
-    if (!gameState.isActive) return;
-    
-    clearFeedback();
-    gameState.currentSentence = getRandomSentence();
-    displaySentence();
-    createOptions();
+function timeOut() {
+    gameState.isPlaying = false;
+    DOM.feedback.textContent = "Tempo esgotado!";
+    DOM.feedback.className = "feedback-card incorrect";
+
+    setTimeout(() => {
+        gameState.currentQuestion++;
+        gameState.isPlaying = true;
+        loadQuestion();
+    }, GAME_CONFIG.answerDelay);
 }
 
-function getRandomSentence() {
-    const randomIndex = Math.floor(Math.random() * gameState.sentences.length);
-    return gameState.sentences[randomIndex];
+function updateScore() {
+    DOM.scoreText.textContent = gameState.score;
 }
 
-function displaySentence() {
-    DOM.sentence.textContent = gameState.currentSentence.sentence;
-    DOM.sentence.style.animation = 'fadeIn 0.5s';
+function updateQuestionCounter() {
+    DOM.questionCounter.textContent = `${gameState.currentQuestion + 1}/${GAME_CONFIG.totalQuestions}`;
 }
 
-function createOptions() {
-    DOM.options.innerHTML = '';
+function endGame() {
+    DOM.gameScreen.style.display = 'none';
+    DOM.nameInputScreen.style.display = 'block';
     
-    const correctOption = createOption(gameState.currentSentence.correct, true);
-    const wrongOptions = [
-        gameState.currentSentence.sentence,
-        generateWrongOption(gameState.currentSentence.correct)
-    ].map(option => createOption(option, false));
+    DOM.finalScore.textContent = gameState.score;
+    DOM.finalDifficulty.textContent = 
+        gameState.currentDifficulty === 'easy' ? 'Fácil' : 
+        gameState.currentDifficulty === 'medium' ? 'Médio' : 'Difícil';
+}
+
+function showRanking() {
+    DOM.startScreen.style.display = 'none';
+    DOM.rankingScreen.style.display = 'block';
+    DOM.backButton.classList.remove('hidden');
+    DOM.backToMainButton.classList.add('hidden');
     
-    shuffleArray([correctOption, ...wrongOptions]).forEach(option => {
-        DOM.options.appendChild(option);
+    filterRanking('all');
+}
+
+function filterRanking(level) {
+    DOM.tabButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.level === level);
+    });
+    
+    let filteredRanking = [...ranking];
+    if (level !== 'all') {
+        filteredRanking = ranking.filter(item => item.difficulty === level);
+    }
+    
+    // Ordena por pontuação (maior primeiro)
+    filteredRanking.sort((a, b) => b.score - a.score);
+    
+    renderRanking(filteredRanking);
+}
+
+function renderRanking(items) {
+    DOM.rankingList.innerHTML = '';
+    
+    if (items.length === 0) {
+        DOM.rankingList.innerHTML = '<p class="no-results">Nenhum registro encontrado</p>';
+        return;
+    }
+    
+    items.forEach((item, index) => {
+        const rankItem = document.createElement('div');
+        rankItem.className = 'rank-item';
+        
+        const medal = index < 3 ? ['🥇', '🥈', '🥉'][index] : `${index + 1}º`;
+        const difficultyClass = `difficulty-${item.difficulty}`;
+        const difficultyName = 
+            item.difficulty === 'easy' ? 'Fácil' : 
+            item.difficulty === 'medium' ? 'Médio' : 'Difícil';
+        
+        rankItem.innerHTML = `
+            <div class="rank-position">${medal}</div>
+            <div class="rank-name">${item.name}</div>
+            <div class="rank-difficulty ${difficultyClass}">${difficultyName}</div>
+            <div class="rank-score">${item.score} pts</div>
+        `;
+        
+        DOM.rankingList.appendChild(rankItem);
     });
 }
 
-function createOption(text, isCorrect) {
-    const button = document.createElement('button');
-    button.className = 'option';
-    button.textContent = text;
-    button.addEventListener('click', () => handleAnswer(isCorrect));
-    return button;
-}
-
-function generateWrongOption(correct) {
-    const commonMistakes = {
-        "Houve muitos problemas na festa.": "Haviam muitos problemas na festa.",
-        "Ele assistiu ao jogo na TV.": "Ele assistiu o jogo na televisão.",
-        "A maioria dos alunos faltou à prova.": "A maioria dos alunos faltaram a prova.",
-        "Vou te emprestar o livro.": "Vou emprestar seu livro para você.",
-        "Faz dois anos que não o vejo.": "Fazem dois anos que não o vejo."
+function savePlayerScore() {
+    const name = DOM.playerName.value.trim();
+    if (!name) {
+        alert('Por favor, digite seu nome para salvar sua pontuação!');
+        return;
+    }
+    
+    const newEntry = {
+        name: name,
+        score: gameState.score,
+        difficulty: gameState.currentDifficulty,
+        date: new Date().toISOString()
     };
     
-    return commonMistakes[correct] || correct.replace(/\b(a|o)\b/g, match => 
-        match === 'a' ? 'à' : 'ao');
-}
-
-// Manipulação de respostas
-function handleAnswer(isCorrect) {
-    if (!gameState.isActive) return;
+    ranking.push(newEntry);
+    localStorage.setItem('grammarRanking', JSON.stringify(ranking));
     
-    clearInterval(gameState.timer);
-    
-    if (isCorrect) {
-        handleCorrect();
-    } else {
-        handleIncorrect();
-    }
-    
-    prepareNextRound();
+    DOM.nameInputScreen.style.display = 'none';
+    DOM.rankingScreen.style.display = 'block';
+    filterRanking('all');
 }
 
-function handleCorrect() {
-    gameState.score++;
-    updateScore();
-    showFeedback(`✅ Correto! ${gameState.currentSentence.explanation}`, 'correct');
-    createAnimation('🎉', '#4CAF50');
-    if (gameState.soundEnabled) sounds.correct.play();
-}
-
-function handleIncorrect() {
-    showFeedback(`❌ Errado! O correto é: "${gameState.currentSentence.correct}". ${gameState.currentSentence.explanation}`, 'incorrect');
-    createAnimation('💥', '#f44336');
-    if (gameState.soundEnabled) sounds.wrong.play();
-}
-
-function createAnimation(emoji, color) {
-    const anim = document.createElement('div');
-    anim.className = 'emoji-animation';
-    anim.textContent = emoji;
-    anim.style.color = color;
-    anim.style.left = `${Math.random() * 70 + 15}%`;
-    DOM.animationContainer.appendChild(anim);
-    
-    setTimeout(() => anim.remove(), 1000);
-}
-
-function prepareNextRound() {
-    setTimeout(() => {
-        if (gameState.timeLeft > 0) {
-            loadNextSentence();
-            startTimer();
+function loadRanking() {
+    if (ranking.length > 0) {
+        // Mantém apenas os 50 melhores resultados para economizar espaço
+        ranking.sort((a, b) => b.score - a.score);
+        while (ranking.length > 50) {
+            ranking.pop();
         }
-    }, 2000);
-}
-
-// Finalização
-function endGame() {
-    gameState.isActive = false;
-    clearInterval(gameState.timer);
-    showFinalResults();
-}
-
-function showFinalResults() {
-    DOM.sentence.textContent = `Fim de jogo! Pontuação: ${gameState.score}`;
-    DOM.options.innerHTML = '';
-    
-    const percentage = (gameState.score / gameState.sentences.length) * 100;
-    let message, className;
-    
-    if (percentage >= 90) {
-        message = '🎉 Excelente! Domínio total da gramática!';
-        className = 'correct';
-    } else if (percentage >= 60) {
-        message = '👍 Bom trabalho! Continue praticando!';
-        className = 'correct';
-    } else {
-        message = '📚 Estude mais e tente novamente!';
-        className = 'incorrect';
+        localStorage.setItem('grammarRanking', JSON.stringify(ranking));
     }
-    
-    showFeedback(message, className);
-    createRestartButton();
 }
 
-function createRestartButton() {
-    const button = document.createElement('button');
-    button.className = 'btn-jogar restart';
-    button.innerHTML = '<i class="fas fa-redo"></i> Jogar Novamente';
-    button.addEventListener('click', () => {
-        DOM.gameScreen.style.animation = 'fadeOut 0.5s forwards';
-        setTimeout(() => {
-            DOM.gameScreen.style.display = 'none';
-            DOM.startScreen.style.display = 'flex';
-            DOM.startScreen.style.animation = 'fadeIn 0.5s forwards';
-            resetGame();
-        }, 500);
-    });
-    
-    DOM.options.appendChild(button);
+function returnToMenu() {
+    DOM.gameScreen.style.display = 'none';
+    DOM.rankingScreen.style.display = 'none';
+    DOM.nameInputScreen.style.display = 'none';
+    DOM.startScreen.style.display = 'flex';
+    DOM.backButton.classList.add('hidden');
+    DOM.backToMainButton.classList.remove('hidden');
+    clearTimer();
 }
 
-// Utilitários
-function updateScore() {
-    DOM.score.textContent = gameState.score;
+function returnToStart() {
+    DOM.rankingScreen.style.display = 'none';
+    DOM.startScreen.style.display = 'flex';
 }
 
-function showFeedback(message, type) {
-    DOM.feedback.textContent = message;
-    DOM.feedback.className = `feedback-card ${type}`;
-}
-
-function clearFeedback() {
-    DOM.feedback.textContent = '';
-    DOM.feedback.className = 'feedback-card';
-}
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-// Iniciar o jogo
 document.addEventListener('DOMContentLoaded', init);
