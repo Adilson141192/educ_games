@@ -131,3 +131,8 @@ function loadResources() {
         // Polyfill para smooth scroll se necessário
     }
 }
+
+document.querySelector('.back-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = this.getAttribute('href');
+});
