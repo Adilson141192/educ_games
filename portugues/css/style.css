@@ -209,3 +209,16 @@ body {
         font-size: 0.9rem;
     }
 }
+
+.card-icon .fa-graduation-cap {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+}
+
+@media (min-width: 768px) {
+    .card-icon .fa-graduation-cap {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+}

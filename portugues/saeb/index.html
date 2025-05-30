@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAEB Português - Jogos Educacionais</title>
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>SAEB Português</h1>
+            <p>Prepare-se para as avaliações com questões reais do SAEB!</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="game-container">
+                <div id="start-screen">
+                    <div id="year-selector">
+                        <h2>Selecione o Ano Escolar:</h2>
+                        <div class="year-options">
+                            <button class="year-btn active" data-year="2">
+                                <i class="fas fa-child"></i> 2º Ano
+                            </button>
+                            <button class="year-btn" data-year="5">
+                                <i class="fas fa-user-graduate"></i> 5º Ano
+                            </button>
+                            <button class="year-btn" data-year="9">
+                                <i class="fas fa-graduation-cap"></i> 9º Ano
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="start-button" class="pulse">
+                        <i class="fas fa-play"></i> Iniciar Jogo
+                    </button>
+                </div>
+
+                <div id="game-screen" style="display:none">
+                    <div class="game-header">
+                        <div id="timer" class="game-timer">
+                            <i class="fas fa-clock"></i> <span>30</span>
+                        </div>
+                        <div id="score" class="game-score">
+                            <i class="fas fa-star"></i> <span>0</span>
+                        </div>
+                        <div id="question-counter" class="game-counter">
+                            <i class="fas fa-question"></i> <span>0/10</span>
+                        </div>
+                    </div>
+
+                    <div id="question-container" class="card">
+                        <div id="question">Carregando pergunta...</div>
+                    </div>
+
+                    <div id="options" class="options-grid">
+                        <!-- Opções serão preenchidas via JavaScript -->
+                    </div>
+
+                    <div id="feedback" class="feedback-card"></div>
+                </div>
+
+                <div id="end-screen" style="display:none">
+                    <div class="card">
+                        <h2>Fim do Jogo!</h2>
+                        <p>Sua pontuação final: <span id="final-score">0</span></p>
+                        <button id="restart-button" class="btn-jogar">
+                            <i class="fas fa-redo"></i> Jogar Novamente
+                        </button>
+                        <button id="back-to-menu" class="btn-jogar">
+                            <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Desenvolvido por Adilson L. S. Junior para a Escola Municipal Liceu Ribamarense</p>
+            <p>© 2025 Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
