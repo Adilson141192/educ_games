@@ -82,8 +82,146 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             ],
             difficulty: "medium"
+        },
+        {
+            id: 3,
+            title: "O Passeio no Parque",
+            content: "Ana e Lucas foram ao parque no domingo. Ana levou sua bicicleta azul e Lucas levou sua pipa. O dia estava ensolarado, e eles brincaram por horas. Ana ensinou Lucas a andar de bicicleta, e Lucas mostrou como empinar pipa. No final do dia, ambos estavam cansados mas felizes.",
+            questions: [
+                {
+                    question: "O que Ana levou para o parque?",
+                    options: [
+                        "Uma pipa",
+                        "Uma bicicleta azul",
+                        "Um livro",
+                        "Uma bola"
+                    ],
+                    correct: 1,
+                    explanation: "O texto diz explicitamente que 'Ana levou sua bicicleta azul'."
+                },
+                {
+                    question: "Como estava o dia no parque?",
+                    options: [
+                        "Chuvoso",
+                        "Nublado",
+                        "Ensolarado",
+                        "Ventando muito"
+                    ],
+                    correct: 2,
+                    explanation: "O texto menciona que 'O dia estava ensolarado'."
+                }
+            ],
+            difficulty: "easy"
+        },
+        {
+            id: 4,
+            title: "A Descoberta Científica",
+            content: "Os cientistas observaram que as borboletas da espécie Morpho possuem asas que refletem a luz de maneira especial. Essa característica não vem de pigmentos, mas da estrutura microscópica das asas, que interfere com a luz. Essa descoberta pode ajudar no desenvolvimento de novas tecnologias ópticas.",
+            questions: [
+                {
+                    question: "Por que as asas da borboleta Morpho refletem luz de maneira especial?",
+                    options: [
+                        "Por causa de pigmentos especiais",
+                        "Devido à estrutura microscópica das asas",
+                        "Porque são molhadas pelo orvalho",
+                        "Porque absorvem muita luz solar"
+                    ],
+                    correct: 1,
+                    explanation: "O texto explica que 'Essa característica não vem de pigmentos, mas da estrutura microscópica das asas'."
+                },
+                {
+                    question: "Qual pode ser a aplicação prática dessa descoberta?",
+                    options: [
+                        "Criação de novos insetos",
+                        "Desenvolvimento de tecnologias ópticas",
+                        "Produção de novos alimentos",
+                        "Cura de doenças"
+                    ],
+                    correct: 1,
+                    explanation: "O texto menciona que 'Essa descoberta pode ajudar no desenvolvimento de novas tecnologias ópticas'."
+                }
+            ],
+            difficulty: "medium"
+        },
+        {
+            id: 5,
+            title: "A Crise Hídrica",
+            content: "A escassez de água tem se agravado em diversas regiões do país. Especialistas apontam que o problema decorre de fatores como desmatamento, crescimento urbano desordenado e mudanças climáticas. A solução exigirá um conjunto de medidas: conscientização da população, investimento em infraestrutura e políticas públicas eficientes. Cada cidadão pode contribuir com ações simples, como reduzir o tempo no banho e reaproveitar água da chuva.",
+            questions: [
+                {
+                    question: "Segundo o texto, qual NÃO é uma causa da crise hídrica?",
+                    options: [
+                        "Desmatamento",
+                        "Crescimento urbano desordenado",
+                        "Mudanças climáticas",
+                        "Excesso de chuvas"
+                    ],
+                    correct: 3,
+                    explanation: "O texto menciona desmatamento, crescimento urbano e mudanças climáticas como causas, mas não cita excesso de chuvas."
+                },
+                {
+                    question: "Qual das alternativas apresenta uma medida que pode ser tomada pelo cidadão comum?",
+                    options: [
+                        "Criar novas políticas públicas",
+                        "Investir em infraestrutura",
+                        "Reduzir o tempo no banho",
+                        "Controlar o desmatamento"
+                    ],
+                    correct: 2,
+                    explanation: "O texto sugere que 'Cada cidadão pode contribuir com ações simples, como reduzir o tempo no banho'."
+                },
+                {
+                    question: "O texto defende que a solução para a crise hídrica depende:",
+                    options: [
+                        "Apenas das autoridades",
+                        "Apenas da população",
+                        "De ações isoladas",
+                        "De um conjunto de medidas"
+                    ],
+                    correct: 3,
+                    explanation: "O texto afirma que 'A solução exigirá um conjunto de medidas', envolvendo vários atores."
+                }
+            ],
+            difficulty: "hard"
+        },
+        {
+            id: 6,
+            title: "A Revolução Digital",
+            content: "A transformação digital tem alterado profundamente as relações sociais e de trabalho. Enquanto facilita o acesso à informação e permite conexões globais, também traz desafios como a exclusão digital e a substituição de postos de trabalho por máquinas. O paradoxo está em como aproveitar os benefícios dessa revolução enquanto mitigamos seus efeitos negativos. A educação continuada surge como ferramenta fundamental para preparar os cidadãos nesse novo cenário.",
+            questions: [
+                {
+                    question: "Qual é o paradoxo mencionado no texto sobre a revolução digital?",
+                    options: [
+                        "Ela cria empregos e destrói outros ao mesmo tempo",
+                        "Facilita o acesso à informação mas causa exclusão digital",
+                        "Conecta pessoas globalmente mas isola os indivíduos",
+                        "Todas as alternativas anteriores"
+                    ],
+                    correct: 3,
+                    explanation: "O texto menciona vários paradoxos, incluindo todos os listados nas opções."
+                },
+                {
+                    question: "Qual é apontada como ferramenta fundamental para preparar os cidadãos?",
+                    options: [
+                        "A regulamentação governamental",
+                        "A educação continuada",
+                        "O afastamento da tecnologia",
+                        "A redução do uso da internet"
+                    ],
+                    correct: 1,
+                    explanation: "O texto afirma claramente que 'A educação continuada surge como ferramenta fundamental'."
+                }
+            ],
+            difficulty: "hard"
         }
     ];
+
+    // Sistema de pontuação por dificuldade
+    const SCORE_VALUES = {
+        easy: 10,
+        medium: 20,
+        hard: 30
+    };
 
     // Estado do jogo
     const gameState = {
@@ -96,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         isActive: false,
         totalQuestions: 0,
         currentDifficulty: 'easy',
+        playerName: '',
         difficultySettings: {
             easy: {
                 name: "Fácil",
@@ -119,6 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const DOM = {
         startScreen: document.getElementById('start-screen'),
         gameScreen: document.getElementById('game-screen'),
+        rankingScreen: document.getElementById('ranking-screen'),
         startButton: document.getElementById('start-button'),
         difficultySelector: document.getElementById('difficulty-selector'),
         difficultyButtons: document.querySelectorAll('.difficulty-btn'),
@@ -136,7 +276,13 @@ document.addEventListener('DOMContentLoaded', function() {
         difficultyIndicator: document.getElementById('difficulty-indicator'),
         timePerQuestion: document.getElementById('time-per-question'),
         currentLevel: document.getElementById('current-level'),
-        currentRules: document.getElementById('current-rules')
+        currentRules: document.getElementById('current-rules'),
+        playerNameContainer: document.getElementById('player-name-container'),
+        playerNameInput: document.getElementById('player-name'),
+        confirmNameButton: document.getElementById('confirm-name'),
+        showRankingButton: document.getElementById('show-ranking'),
+        rankingList: document.getElementById('ranking-list'),
+        backFromRankingButton: document.getElementById('back-from-ranking')
     };
 
     // Inicialização
@@ -153,8 +299,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         DOM.backButton.addEventListener('click', returnToMenu);
         DOM.backToMainButton.addEventListener('click', () => {
-            window.location.href = '../../index.html';
+            window.location.href = '../index.html'; // Alterado para voltar para o menu da disciplina
         });
+        DOM.confirmNameButton.addEventListener('click', confirmPlayerName);
+        DOM.showRankingButton.addEventListener('click', showRanking);
+        DOM.backFromRankingButton.addEventListener('click', hideRanking);
     }
 
     // Define a dificuldade do jogo
@@ -174,6 +323,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fluxo do jogo
     function startGame() {
+        DOM.playerNameContainer.style.display = 'flex';
+        DOM.startButton.style.display = 'none';
+    }
+
+    function confirmPlayerName() {
+        const name = DOM.playerNameInput.value.trim();
+        if (name.length < 2 || name.length > 15) {
+            alert("Por favor, digite um nome entre 2 e 15 caracteres!");
+            return;
+        }
+        
+        gameState.playerName = name;
         DOM.startScreen.style.display = 'none';
         DOM.gameScreen.style.display = 'block';
         DOM.backButton.classList.remove('hidden');
@@ -344,7 +505,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showFinalResults() {
         DOM.textContent.textContent = `Fim do texto: ${gameState.currentText.title}`;
-        DOM.question.textContent = `Pontuação final: ${gameState.score}/${gameState.totalQuestions}`;
+        
+        // Calcula a pontuação final com multiplicador de dificuldade
+        const finalScore = gameState.score * SCORE_VALUES[gameState.currentDifficulty];
+        DOM.question.textContent = `Pontuação final: ${finalScore} pontos`;
+        
         DOM.options.innerHTML = '';
         
         const percentage = (gameState.score / gameState.totalQuestions) * 100;
@@ -362,6 +527,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         showFeedback(message, className);
+        
+        // Salva a pontuação no ranking
+        saveScoreToRanking(finalScore);
         createRestartButton();
     }
 
@@ -379,7 +547,75 @@ document.addEventListener('DOMContentLoaded', function() {
         DOM.startScreen.style.display = 'flex';
         DOM.backButton.classList.add('hidden');
         DOM.backToMainButton.classList.remove('hidden');
+        DOM.playerNameContainer.style.display = 'none';
+        DOM.startButton.style.display = 'block';
+        DOM.playerNameInput.value = '';
         clearInterval(gameState.timer);
+    }
+
+    // Sistema de Ranking
+    function saveScoreToRanking(score) {
+        const ranking = getRanking();
+        
+        ranking.push({
+            name: gameState.playerName,
+            score: score,
+            difficulty: gameState.currentDifficulty,
+            date: new Date().toISOString()
+        });
+        
+        // Ordena por pontuação (maior primeiro)
+        ranking.sort((a, b) => b.score - a.score);
+        
+        // Mantém apenas os top 10
+        if (ranking.length > 10) {
+            ranking.length = 10;
+        }
+        
+        localStorage.setItem('textGameRanking', JSON.stringify(ranking));
+    }
+
+    function getRanking() {
+        const ranking = localStorage.getItem('textGameRanking');
+        return ranking ? JSON.parse(ranking) : [];
+    }
+
+    function showRanking() {
+        DOM.startScreen.style.display = 'none';
+        DOM.rankingScreen.style.display = 'block';
+        renderRanking();
+    }
+
+    function hideRanking() {
+        DOM.rankingScreen.style.display = 'none';
+        DOM.startScreen.style.display = 'flex';
+    }
+
+    function renderRanking() {
+        const ranking = getRanking();
+        DOM.rankingList.innerHTML = '';
+        
+        if (ranking.length === 0) {
+            DOM.rankingList.innerHTML = '<p>Nenhuma pontuação registrada ainda!</p>';
+            return;
+        }
+        
+        ranking.forEach((entry, index) => {
+            const item = document.createElement('div');
+            item.className = 'ranking-item';
+            
+            const difficultyClass = entry.difficulty === 'easy' ? 'easy' : 
+                                  entry.difficulty === 'medium' ? 'medium' : 'hard';
+            
+            item.innerHTML = `
+                <div class="ranking-position">${index + 1}º</div>
+                <div class="ranking-name">${entry.name}</div>
+                <div class="ranking-score">${entry.score} pts</div>
+                <div class="ranking-difficulty ${difficultyClass}">${gameState.difficultySettings[entry.difficulty].name}</div>
+            `;
+            
+            DOM.rankingList.appendChild(item);
+        });
     }
 
     // Utilitários

@@ -10,21 +10,17 @@
     --card-bg: rgba(255, 255, 255, 0.1);
     --shadow: 0 4px 6px rgba(0,0,0,0.1);
     --transition: all 0.3s ease;
-    --easy: #4CAF50;
-    --medium: #FFC107;
-    --hard: #F44336;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(45deg, #8E2DE2, #4A00E0);
+    background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
     color: var(--text-light);
     line-height: 1.6;
     padding: 15px;
@@ -32,20 +28,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    touch-action: manipulation;
 }
 
 #game-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 100%;
     background-color: var(--bg-dark);
     border-radius: 12px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: var(--shadow);
     position: relative;
-    overflow: hidden;
 }
 
+/* Header */
 header {
     text-align: center;
     margin-bottom: 20px;
@@ -64,101 +59,20 @@ header h1 {
     opacity: 0.9;
 }
 
-.menu-button {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    z-index: 10;
-}
-
-.menu-button:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
-}
-
-.back-to-main {
-    left: auto;
-    right: 15px;
-}
-
-.hidden {
-    display: none;
-}
-
-#difficulty-selector {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#difficulty-selector h2 {
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-.difficulty-options {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.difficulty-btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
-}
-
-.difficulty-btn[data-level="easy"] {
-    background-color: var(--easy);
-    color: white;
-}
-
-.difficulty-btn[data-level="medium"] {
-    background-color: var(--medium);
-    color: var(--text-dark);
-}
-
-.difficulty-btn[data-level="hard"] {
-    background-color: var(--hard);
-    color: white;
-}
-
-.difficulty-btn.active {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-}
-
+/* Tela de início */
 #start-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 10px 0;
 }
 
 #start-button {
     background-color: var(--correct);
     color: white;
     border: none;
-    padding: 12px 20px;
-    font-size: 1rem;
+    padding: 15px 25px;
+    font-size: 1.1rem;
     border-radius: 50px;
     cursor: pointer;
     margin: 15px 0;
@@ -167,14 +81,19 @@ header h1 {
     align-items: center;
     gap: 10px;
     box-shadow: var(--shadow);
-    width: 80%;
-    max-width: 250px;
+    width: 100%;
+    max-width: 300px;
     justify-content: center;
 }
 
-#start-button:hover {
+#start-button:hover, #start-button:focus {
     background-color: #45a049;
     transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+#start-button.pulse {
+    animation: pulse 2s infinite;
 }
 
 #instructions {
@@ -185,41 +104,43 @@ header h1 {
 .instruction-card {
     background-color: var(--card-bg);
     border-radius: 10px;
-    padding: 12px;
+    padding: 15px;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
+    font-size: 0.95rem;
     backdrop-filter: blur(5px);
-    font-size: 0.9rem;
 }
 
 .instruction-card i {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: var(--secondary);
 }
 
+/* Tela do jogo */
 #game-screen {
     display: none;
+    width: 100%;
 }
 
 .game-header {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
     margin-bottom: 15px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.game-timer, .game-score, .game-counter, .game-difficulty {
+.game-timer, .game-score, .game-counter {
     background-color: var(--card-bg);
-    padding: 8px 12px;
+    padding: 8px 15px;
     border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 1rem;
     backdrop-filter: blur(5px);
-    font-size: 0.9rem;
 }
 
 .game-timer.warning {
@@ -227,24 +148,14 @@ header h1 {
     animation: pulse 1s infinite;
 }
 
-.game-timer.critical {
-    color: var(--incorrect);
-    animation: pulse 0.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
+/* Cartões de texto e pergunta */
 .card {
     background-color: var(--card-bg);
     border-radius: 10px;
-    padding: 15px;
+    padding: 20px;
     margin: 15px 0;
-    text-align: center;
     backdrop-filter: blur(5px);
+    transition: var(--transition);
 }
 
 .scrollable {
@@ -263,52 +174,69 @@ header h1 {
     border-radius: 3px;
 }
 
+#text-container {
+    min-height: 150px;
+}
+
 #text-content {
     font-size: 1.1rem;
     line-height: 1.5;
     text-align: justify;
 }
 
+#question-container {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+}
+
 #question {
     font-size: 1.2rem;
     font-weight: bold;
+    text-align: center;
+    width: 100%;
 }
 
+/* Opções */
 .options-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
-    margin: 15px 0;
+    gap: 12px;
+    margin: 20px 0;
 }
 
 button.option {
     background-color: var(--secondary);
     color: white;
     border: none;
-    padding: 12px;
+    padding: 15px;
     border-radius: 8px;
     cursor: pointer;
+    font-size: 1rem;
     transition: var(--transition);
     text-align: center;
+    width: 100%;
+}
+
+button.option:hover, button.option:focus {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+/* Feedback */
+.feedback-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
     font-size: 1rem;
+    backdrop-filter: blur(5px);
     min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-button.option:hover {
-    background-color: #2980b9;
-    transform: translateY(-3px);
-}
-
-.feedback-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 12px;
-    margin: 12px 0;
-    backdrop-filter: blur(5px);
-    font-size: 0.9rem;
+    text-align: center;
 }
 
 .correct {
@@ -321,28 +249,49 @@ button.option:hover {
     border-left: 4px solid var(--incorrect);
 }
 
+/* Botões */
+.menu-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.menu-button:hover, .menu-button:focus {
+    background: rgba(255,255,255,0.4);
+    transform: scale(1.1);
+}
+
 button.restart {
     background-color: var(--secondary);
     color: white;
     border: none;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 12px 25px;
+    border-radius: 50px;
     cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: var(--transition);
     font-size: 1rem;
+    margin-top: 15px;
+    width: 100%;
+    transition: var(--transition);
 }
 
-button.restart:hover {
+button.restart:hover, button.restart:focus {
     background-color: #2980b9;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
+/* Animações */
 .emoji-animation {
     position: absolute;
     font-size: 2.5rem;
@@ -356,38 +305,27 @@ button.restart:hover {
     100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
 }
 
-/* Responsividade */
-@media (max-width: 480px) {
-    #game-container {
-        padding: 15px;
-    }
-    
-    header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .subtitle {
-        font-size: 0.9rem;
-    }
-    
-    #text-content {
-        font-size: 1rem;
-    }
-    
-    #question {
-        font-size: 1.1rem;
-    }
-    
-    button.option {
-        padding: 10px;
-        font-size: 0.9rem;
-        min-height: 50px;
-    }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
-@media (min-width: 768px) {
-    .options-grid {
-        grid-template-columns: 1fr 1fr;
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== MEDIA QUERIES ===== */
+@media (min-width: 400px) {
+    #game-container {
+        padding: 20px;
     }
     
     #text-content {
@@ -397,4 +335,239 @@ button.restart:hover {
     #question {
         font-size: 1.3rem;
     }
+}
+
+@media (min-width: 600px) {
+    body {
+        padding: 20px;
+    }
+    
+    #game-container {
+        max-width: 500px;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    #start-button {
+        font-size: 1.2rem;
+    }
+    
+    .scrollable {
+        max-height: 250px;
+    }
+}
+
+@media (min-width: 768px) {
+    #game-container {
+        max-width: 600px;
+        padding: 25px;
+    }
+    
+    header h1 {
+        font-size: 2.2rem;
+    }
+    
+    #text-content {
+        font-size: 1.3rem;
+    }
+    
+    #question {
+        font-size: 1.4rem;
+    }
+    
+    .instruction-card {
+        font-size: 1.05rem;
+    }
+    
+    .scrollable {
+        max-height: 300px;
+    }
+}
+
+#player-name-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
+    gap: 10px;
+}
+
+#player-name {
+    width: 80%;
+    max-width: 300px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+#player-name::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#confirm-name {
+    background-color: var(--correct);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#confirm-name:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.ranking-button {
+    background-color: var(--warning);
+    color: var(--text-dark);
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 15px 0;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+    width: 80%;
+    max-width: 250px;
+    justify-content: center;
+}
+
+.ranking-button:hover {
+    background-color: #e68a00;
+    transform: translateY(-3px);
+}
+
+#ranking-screen {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#ranking-screen h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #ffeb3b;
+}
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ranking-item:last-child {
+    border-bottom: none;
+}
+
+.ranking-position {
+    font-weight: bold;
+    color: #ffeb3b;
+    min-width: 30px;
+}
+
+.ranking-name {
+    flex-grow: 1;
+    text-align: left;
+    padding: 0 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ranking-score {
+    font-weight: bold;
+    min-width: 60px;
+}
+
+/* Dificuldade */
+.difficulty-options {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.difficulty-btn {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.difficulty-btn.active {
+    background-color: var(--secondary);
+    font-weight: bold;
+}
+
+.difficulty-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.difficulty-btn i {
+    font-size: 1.2rem;
+}
+
+/* Indicador de dificuldade */
+.game-difficulty {
+    background-color: var(--card-bg);
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    backdrop-filter: blur(5px);
+}
+
+.game-difficulty.easy {
+    color: #4CAF50;
+}
+
+.game-difficulty.medium {
+    color: #FF9800;
+}
+
+.game-difficulty.hard {
+    color: #F44336;
+}
+
+/* Dificuldades no ranking */
+.ranking-difficulty.easy {
+    color: #4CAF50;
+}
+
+.ranking-difficulty.medium {
+    color: #FF9800;
+}
+
+.ranking-difficulty.hard {
+    color: #F44336;
+}
+
+#back-from-ranking {
+    margin-top: 20px;
 }
