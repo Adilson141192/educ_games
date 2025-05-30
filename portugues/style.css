@@ -40,7 +40,6 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding: 1.5rem 0;
 }
 
 body.keyboard-navigation :focus {
@@ -125,6 +124,7 @@ body.offline::before {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
+    height: 100%;
 }
 
 .games-grid {
@@ -132,6 +132,7 @@ body.offline::before {
     grid-template-columns: 1fr;
     gap: 1rem;
     margin-top: 1.5rem;
+    padding-bottom: 1rem;
 }
 
 .game-card {
