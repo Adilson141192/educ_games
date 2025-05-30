@@ -40,6 +40,7 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-y: auto; /* Adicionado para garantir rolagem */
 }
 
 body.keyboard-navigation :focus {
@@ -121,10 +122,9 @@ body.offline::before {
 .main-content {
     padding: 1.5rem 0;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Alterado para auto */
     -webkit-overflow-scrolling: touch;
     min-height: 0;
-    height: 100%;
 }
 
 .games-grid {
