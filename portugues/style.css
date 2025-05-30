@@ -7,7 +7,7 @@
 }
 
 :root {
-    --primary-color: #3498db; /* Cor específica para português */
+    --primary-color: #3498db;
     --secondary-color: #2ecc71;
     --accent-color: #3498db;
     --dark-color: #2c3e50;
@@ -16,19 +16,17 @@
     --text-light: #7f8c8d;
 }
 
-html, body {
-    overflow-x: hidden; /* Impede rolagem horizontal */
-    height: 100%; /* Garante que o body ocupe toda a altura */
+html {
+    height: 100%;
 }
 
 body {
     background-color: #f5f5f5;
     color: var(--text-color);
     line-height: 1.6;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da viewport */
-    position: relative;
 }
 
 .container {
@@ -42,10 +40,12 @@ body {
 .header {
     background-color: var(--dark-color);
     color: white;
-    padding: 2rem 0;
+    padding: 1rem 0;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     width: 100%;
 }
 
@@ -83,9 +83,8 @@ body {
 /* Main Content */
 .main-content {
     padding: 2rem 0;
-    flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
+    flex: 1;
     width: 100%;
-    overflow-y: auto; /* Permite rolagem vertical apenas se necessário */
 }
 
 .games-grid {
@@ -107,7 +106,7 @@ body {
     display: block;
     position: relative;
     border-top: 4px solid var(--primary-color);
-    overflow: hidden; /* Para evitar problemas com bordas */
+    overflow: hidden;
 }
 
 .game-card:hover {
@@ -151,36 +150,28 @@ body {
     background-color: var(--dark-color);
     color: white;
     text-align: center;
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     font-size: 0.9rem;
     width: 100%;
 }
 
 /* Media Queries para mobile */
 @media (max-width: 767px) {
-    html, body {
-        position: fixed; /* Impede qualquer rolagem */
-        width: 100%;
-        height: 100%;
-        overflow: hidden; /* Remove completamente a rolagem */
+    body {
+        overflow-x: hidden;
+        display: block;
+        height: auto;
+        min-height: 100vh;
     }
-    
-    .main-content {
-        overflow-y: auto; /* Permite rolagem apenas no conteúdo principal */
-        -webkit-overflow-scrolling: touch; /* Melhora a rolagem no iOS */
-        padding-bottom: 20px; /* Espaço para o footer */
-    }
-    
+
     .header {
-        padding: 1.5rem 0;
-        text-align: left;
-        padding-left: 60px;
-        position: fixed;
+        position: sticky;
         top: 0;
-        width: 100%;
-        z-index: 100;
+        padding: 1rem 0;
+        padding-left: 60px;
+        text-align: left;
     }
-    
+
     .back-button {
         position: fixed;
         top: 15px;
@@ -196,34 +187,30 @@ body {
         justify-content: center;
         transform: none;
     }
-    
+
     .back-button:hover {
         transform: none;
         background: rgba(0,0,0,0.9);
     }
-    
+
     .header h1 {
         font-size: 1.5rem;
     }
-    
+
     .header p {
         font-size: 0.9rem;
     }
-    
+
     .main-content {
-        margin-top: 90px; /* Compensa o header fixo */
-        height: calc(100% - 90px - 60px); /* Altura total menos header e footer */
+        padding: 1rem 0;
     }
-    
-    .footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
-    
+
     .games-grid {
-        margin-bottom: 20px; /* Espaço extra no final para evitar que o footer cubra conteúdo */
+        gap: 1rem;
+    }
+
+    .game-card {
+        padding: 1.2rem;
     }
 }
 
@@ -240,11 +227,6 @@ body {
 
 /* Media Queries para desktops */
 @media (min-width: 992px) {
-    html, body {
-        position: static;
-        overflow: visible;
-    }
-    
     .games-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -255,14 +237,5 @@ body {
     
     .back-button {
         left: 30px;
-    }
-    
-    .main-content {
-        margin-top: 0;
-        height: auto;
-    }
-    
-    .header, .footer {
-        position: relative;
     }
 }
