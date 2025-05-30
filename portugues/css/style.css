@@ -1,6 +1,88 @@
-/* Estilos específicos para jogos de português */
+/* Estilos gerais */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --dark-color: #333;
+    --light-color: #f4f4f4;
+    --text-light: #ecf0f1;
+    --correct: #4CAF50;
+    --incorrect: #f44336;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header */
+.header {
+    background: var(--secondary-color);
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+    position: relative;
+}
+
+.header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.back-button {
+    color: white;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 1rem;
+    top: 1.5rem;
+    text-decoration: none;
+}
+
+/* Main Content */
+.main-content {
+    padding: 2rem 0;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
 .game-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    color: inherit;
     border-top: 4px solid var(--primary-color);
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
 }
 
 .game-card h2 {
@@ -15,6 +97,15 @@
     margin-bottom: 1.5rem;
 }
 
+.btn-jogar {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
 .coming-soon {
     opacity: 0.7;
     filter: grayscale(50%);
@@ -22,21 +113,49 @@
 }
 
 .coming-soon .btn-jogar {
-    background-color: var(--text-light);
+    background-color: #95a5a6;
 }
 
-.back-button {
+/* Footer */
+.footer {
+    background: var(--secondary-color);
     color: white;
-    font-size: 1.5rem;
-    position: absolute;
-    left: 1rem;
-    top: 1.5rem;
-    text-decoration: none;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    font-size: 0.9rem;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
     .games-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .back-button {
+        font-size: 1.2rem;
+        top: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+    }
+    
+    .header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .game-card {
+        padding: 1rem;
+    }
+    
+    .card-icon {
+        font-size: 2rem;
     }
 }

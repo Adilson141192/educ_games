@@ -19,6 +19,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -31,6 +32,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    touch-action: manipulation;
 }
 
 #game-container {
@@ -41,6 +43,7 @@ body {
     padding: 20px;
     box-shadow: var(--shadow);
     position: relative;
+    overflow: hidden;
 }
 
 header {
@@ -77,6 +80,7 @@ header h1 {
     align-items: center;
     justify-content: center;
     font-size: 1rem;
+    z-index: 10;
 }
 
 .menu-button:hover {
@@ -120,6 +124,7 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 0.9rem;
 }
 
 .difficulty-btn[data-level="easy"] {
@@ -162,6 +167,9 @@ header h1 {
     align-items: center;
     gap: 10px;
     box-shadow: var(--shadow);
+    width: 80%;
+    max-width: 250px;
+    justify-content: center;
 }
 
 #start-button:hover {
@@ -183,6 +191,7 @@ header h1 {
     align-items: center;
     gap: 12px;
     backdrop-filter: blur(5px);
+    font-size: 0.9rem;
 }
 
 .instruction-card i {
@@ -210,6 +219,7 @@ header h1 {
     align-items: center;
     gap: 8px;
     backdrop-filter: blur(5px);
+    font-size: 0.9rem;
 }
 
 .game-timer.warning {
@@ -241,6 +251,7 @@ header h1 {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 5px;
+    word-break: break-word;
 }
 
 .hint-container {
@@ -259,6 +270,7 @@ header h1 {
     gap: 5px;
     margin: 0 auto;
     transition: var(--transition);
+    font-size: 0.9rem;
 }
 
 .hint-button:hover {
@@ -294,6 +306,11 @@ button.option {
     cursor: pointer;
     transition: var(--transition);
     text-align: center;
+    font-size: 1rem;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 button.option:hover {
@@ -307,6 +324,7 @@ button.option:hover {
     padding: 12px;
     margin: 12px 0;
     backdrop-filter: blur(5px);
+    font-size: 0.9rem;
 }
 
 .correct {
@@ -333,6 +351,7 @@ button.restart {
     justify-content: center;
     gap: 8px;
     transition: var(--transition);
+    font-size: 1rem;
 }
 
 button.restart:hover {
@@ -340,12 +359,62 @@ button.restart:hover {
     transform: translateY(-2px);
 }
 
-@media (min-width: 768px) {
-    .options-grid {
-        grid-template-columns: 1fr 1fr;
+/* Melhorias para mobile */
+@media (max-width: 480px) {
+    #game-container {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .difficulty-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    #start-button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .instruction-card {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    
+    .game-header {
+        gap: 8px;
+    }
+    
+    .game-timer, .game-score, .game-counter, .game-difficulty {
+        padding: 6px 10px;
+        font-size: 0.8rem;
     }
     
     #word {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
+    }
+    
+    button.option {
+        padding: 10px;
+        font-size: 0.9rem;
+        min-height: 50px;
+    }
+    
+    .feedback-card {
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
