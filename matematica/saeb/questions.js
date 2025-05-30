@@ -237,6 +237,29 @@ const SAEB_QUESTIONS = {
     ],
     "5": [
         {
+            question: "João saiu de sua casa e foi encontrar Roberto, que estava na barraquinha de sorvete. Considerando as instruções dadas, Roberto estava em qual posição?",
+            options: ["Posição A", "Posição B", "Posição C", "Posição D"],
+            correct: 1,
+            explanation: "Seguindo as instruções de virar à direita e depois na segunda rua à direita, Roberto estava na Posição B."
+        },
+        {
+            question: "Qual das figuras representa a planificação de um cubo?",
+            options: ["Figura A", "Figura B", "Figura C", "Figura D"],
+            correct: 2,
+            explanation: "A Figura C mostra a planificação correta de um cubo, com 6 quadrados dispostos de forma que possam ser dobrados em um cubo."
+        },
+        {
+            question: "Qual é uma característica comum entre os triângulos mostrados?",
+            options: [
+                "Possuem um ângulo maior que 90 graus",
+                "Possuem um ângulo reto",
+                "Todos os ângulos são menores que 90 graus",
+                "Não apresentam características em comum"
+            ],
+            correct: 2,
+            explanation: "Todos os triângulos mostrados são acutângulos, com todos os ângulos menores que 90 graus."
+        },
+        {
             question: "Qual é o resultado de 25 × 4?",
             options: ["50", "75", "100", "125"],
             correct: 2,
@@ -466,6 +489,42 @@ const SAEB_QUESTIONS = {
         }
     ],
     "9": [
+        {
+            question: "Qual é o resultado de 3² + 4²?",
+            options: ["5", "7", "12", "25"],
+            correct: 3,
+            explanation: "3² = 9, 4² = 16, então 9 + 16 = 25."
+        },
+        {
+            question: "Qual é a raiz quadrada de 144?",
+            options: ["10", "11", "12", "13"],
+            correct: 2,
+            explanation: "12 × 12 = 144, então √144 = 12."
+        },
+        {
+            question: "Qual é o valor de x na equação 2x + 5 = 15?",
+            options: ["5", "10", "15", "20"],
+            correct: 0,
+            explanation: "2x + 5 = 15 → 2x = 10 → x = 5."
+        },
+        // ... (continuar com as demais questões)
+        {
+            question: "Qual é a fórmula da distância entre dois pontos (x₁,y₁) e (x₂,y₂)?",
+            options: [
+                "√(x₂ - x₁) + (y₂ - y₁)",
+                "√(x₂ - x₁)² + (y₂ - y₁)²",
+                "(x₂ - x₁)² + (y₂ - y₁)²",
+                "|x₂ - x₁| + |y₂ - y₁|"
+            ],
+            correct: 1,
+            explanation: "Distância = √[(x₂ - x₁)² + (y₂ - y₁)²]."
+        },
+        {
+            question: "Qual é o resultado de (√3)²?",
+            options: ["√3", "3", "9", "27"],
+            correct: 1,
+            explanation: "(√3)² = 3."
+        },
         {
             question: "Qual é o resultado de 3² + 4²?",
             options: ["5", "7", "12", "25"],

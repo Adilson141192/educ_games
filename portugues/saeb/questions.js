@@ -2,6 +2,12 @@ const SAEB_QUESTIONS = {
     "2": [
         {
             question: "Qual palavra completa a frase: 'O ____ está quente'?",
+            options: ["sol", "sól", "sôl", "soll"],
+            correct: 0,
+            explanation: "A grafia correta é 'sol' com 's' e 'l' no final."
+        },
+        {
+            question: "Qual palavra completa a frase: 'O ____ está quente'?",
             options: [
                 "sol",
                 "sól",
@@ -586,6 +592,34 @@ const SAEB_QUESTIONS = {
     ],
     "5": [
         {
+            question: "De acordo com o texto 'QUANDO OS VILÕES SE ENCONTRAM', o presidente da associação dos vilões era:",
+            options: ["Dick Vigarista", "Cavaleiro Negro", "Capitão Gancho", "Lobo Mau"],
+            correct: 3,
+            explanation: "No texto, é mencionado que 'O Lobo Mau, que era o presidente da associação'."
+        },
+        {
+            question: "A matéria 'Brasil perde 4,6 milhões de leitores em quatro anos' informa principalmente:",
+            options: [
+                "da maior quantidade de leitores adultos comparada à quantidade de leitores adolescentes",
+                "do crescimento gradual entre os leitores brasileiros de todas as faixas etárias",
+                "da considerável queda de leitores num período de quatro anos e um agravante das classes sociais A e B",
+                "de um avanço significativo entre os leitores mais ricos em comparação aos leitores de classes sociais mais baixas"
+            ],
+            correct: 2,
+            explanation: "A matéria destaca a queda de leitores e que as classes A e B tiveram as maiores quedas."
+        },
+        {
+            question: "Na frase 'Não fazia caso nenhum das minhas ternurinhas', o menino quer dizer que o porquinho:",
+            options: [
+                "não gostava dele",
+                "não ligava para as delicadezas dele",
+                "só queria ficar na sala",
+                "gostava de lugares bonitos e limpinhos"
+            ],
+            correct: 1,
+            explanation: "A expressão 'não fazia caso' significa que o porquinho ignorava as demonstrações de afeto do menino."
+        },
+        {
             question: "Qual é o sujeito da frase: 'As crianças brincam no parque'?",
             options: [
                 "brincam",
@@ -1105,6 +1139,50 @@ const SAEB_QUESTIONS = {
         }
     ],
     "9": [
+        {
+            question: "Qual é a função da palavra 'mas' no trecho: 'Ele queria ir, mas estava cansado'?",
+            options: [
+                "Adicionar informações",
+                "Apresentar uma oposição",
+                "Indicar tempo",
+                "Mostrar causa"
+            ],
+            correct: 1,
+            explanation: "A conjunção 'mas' é usada para expressar ideias contrárias ou de oposição."
+        },
+        {
+            question: "Qual é o tipo de sujeito na frase: 'Choveu muito ontem'?",
+            options: [
+                "Sujeito simples",
+                "Sujeito composto",
+                "Sujeito oculto",
+                "Sujeito indeterminado"
+            ],
+            correct: 3,
+            explanation: "A frase possui sujeito indeterminado, pois não é possível identificar quem pratica a ação de chover."
+        },
+        {
+            question: "De acordo com o texto 'Minha Sombra', a sombra imita o menino:",
+            options: [
+                "de manhã.",
+                "ao meio-dia.",
+                "à tardinha.",
+                "à noite."
+            ],
+            correct: 0,
+            explanation: "O texto diz: 'De manhã a minha sombra... começam a me arremedar'."
+        },
+        {
+            question: "A expressão 'biógrafo de mão cheia' significa que Scliar é:",
+            options: [
+                "crítico e detalhista.",
+                "criativo e inconsequente.",
+                "habilidoso e talentoso.",
+                "inteligente e ultrapassado."
+            ],
+            correct: 2,
+            explanation: "'De mão cheia' é uma expressão que indica habilidade e talento."
+        },
         {
             question: "Qual é a função da palavra 'mas' no trecho: 'Ele queria ir, mas estava cansado'?",
             options: [
