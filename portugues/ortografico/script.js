@@ -148,14 +148,20 @@ function init() {
     setDifficulty('easy');
 }
 
-// Configura os event listeners
+// Configuração dos botões de navegação
 function setupEventListeners() {
     DOM.startButton.addEventListener('click', startGame);
     DOM.difficultyButtons.forEach(btn => {
         btn.addEventListener('click', () => setDifficulty(btn.dataset.level));
     });
     DOM.hintButton.addEventListener('click', toggleHint);
-    DOM.backButton.addEventListener('click', returnToMenu);
+    
+    // Botão voltar para o menu de português
+    DOM.backButton.addEventListener('click', () => {
+        window.location.href = '../index.html';
+    });
+    
+    // Botão voltar para a página principal (não usado neste caso)
     DOM.backToMainButton.addEventListener('click', () => {
         window.location.href = '../../../index.html';
     });

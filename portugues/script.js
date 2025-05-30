@@ -206,6 +206,13 @@ function displayStats() {
 // Inicialização
 function init() {
     // Configura os botões
+    if (DOM.backButton) {
+        DOM.backButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '../index.html';
+        });
+    }
+    
     DOM.backButton.classList.add('hidden');
     DOM.backToMainButton.classList.remove('hidden');
 
@@ -216,7 +223,7 @@ function init() {
         returnToMenu();
     });
     DOM.backToMainButton.addEventListener('click', () => {
-        window.location.href = '../../index.html';
+        window.location.href = '../index.html';
     });
 
     // Configuração dos botões de dificuldade

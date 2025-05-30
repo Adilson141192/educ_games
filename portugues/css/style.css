@@ -189,3 +189,26 @@ body {
         font-size: 0.9rem;
     }
 }
+
+.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
