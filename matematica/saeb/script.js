@@ -5,7 +5,8 @@ const GAME_CONFIG = {
         "5": 35,
         "9": 25
     },
-    answerDelay: 2000
+    answerDelay: 2000,
+    basePoints: 10
 };
 
 const gameState = {
@@ -38,7 +39,7 @@ const DOM = {
     playerName: document.getElementById('player-name'),
     saveScoreBtn: document.getElementById('save-score-btn'),
     nameInputContainer: document.getElementById('name-input-container'),
-    rankingSection: document.getElementById('ranking-section')
+    timerElement: document.getElementById('timer')
 };
 
 // Sistema de Ranking
@@ -136,7 +137,19 @@ function saveScore() {
     
     updateRanking(name, gameState.currentYear, gameState.score);
     DOM.nameInputContainer.style.display = 'none';
-    DOM.rankingSection.scrollIntoView({ behavior: 'smooth' });
+    DOM.playerName.value = '';
+    
+    // Mostrar mensagem de sucesso
+    const successMsg = document.createElement('p');
+    successMsg.textContent = 'Pontuação salva com sucesso!';
+    successMsg.style.color = 'var(--correct)';
+    successMsg.style.textAlign = 'center';
+    successMsg.style.margin = '10px 0';
+    DOM.nameInputContainer.parentNode.insertBefore(successMsg, DOM.nameInputContainer.nextSibling);
+    
+    setTimeout(() => {
+        successMsg.remove();
+    }, 3000);
 }
 
 function setYear(year) {
@@ -218,13 +231,13 @@ function checkAnswer(isCorrect) {
     
     if (isCorrect) {
         const timeBonus = Math.floor(gameState.timeLeft / 5);
-        gameState.score += 10 + timeBonus;
+        gameState.score += GAME_CONFIG.basePoints + timeBonus;
         updateScore();
-        DOM.feedback.textContent = `Correto! +${timeBonus} bônus! ${gameState.currentQuestionObj.explanation}`;
+        DOM.feedback.textContent = `✅ Correto! +${timeBonus} bônus!\n${gameState.currentQuestionObj.explanation}`;
         DOM.feedback.className = "feedback-card correct";
     } else {
         const correctOption = gameState.currentQuestionObj.options[gameState.currentQuestionObj.correct];
-        DOM.feedback.textContent = `Incorreto! A resposta correta é: "${correctOption}". ${gameState.currentQuestionObj.explanation}`;
+        DOM.feedback.textContent = `❌ Incorreto! A resposta correta é: "${correctOption}".\n${gameState.currentQuestionObj.explanation}`;
         DOM.feedback.className = "feedback-card incorrect";
     }
     
@@ -238,18 +251,18 @@ function checkAnswer(isCorrect) {
 function startTimer() {
     gameState.timeLeft = GAME_CONFIG.timePerQuestion[gameState.currentYear];
     DOM.timerText.textContent = gameState.timeLeft;
+    DOM.timerElement.className = 'game-info';
     
     gameState.timer = setInterval(() => {
         gameState.timeLeft--;
         DOM.timerText.textContent = gameState.timeLeft;
         
-        DOM.timer.className = 'game-timer';
         if (gameState.timeLeft <= 10) {
-            DOM.timer.classList.add('warning');
+            DOM.timerElement.classList.add('warning');
         }
         if (gameState.timeLeft <= 5) {
-            DOM.timer.classList.remove('warning');
-            DOM.timer.classList.add('critical');
+            DOM.timerElement.classList.remove('warning');
+            DOM.timerElement.classList.add('critical');
         }
         
         if (gameState.timeLeft <= 0) {
@@ -261,7 +274,7 @@ function startTimer() {
 
 function timeOut() {
     gameState.isPlaying = false;
-    DOM.feedback.textContent = "Tempo esgotado!";
+    DOM.feedback.textContent = "⏰ Tempo esgotado!";
     DOM.feedback.className = "feedback-card incorrect";
     
     setTimeout(() => {
@@ -284,7 +297,6 @@ function endGame() {
     DOM.endScreen.style.display = 'block';
     DOM.finalScore.textContent = gameState.score;
     DOM.nameInputContainer.style.display = 'flex';
-    DOM.playerName.value = '';
     DOM.playerName.focus();
 }
 
@@ -299,4 +311,5 @@ function returnToMenu() {
     displayRanking();
 }
 
+// Inicializa o jogo quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', init);
