@@ -1,4 +1,4 @@
-/* Estilos gerais - Mobile First */
+/* Estilos gerais - Mobile First com melhorias para touch */
 :root {
     --primary-color: #3498db;
     --secondary-color: #2c3e50;
@@ -7,22 +7,37 @@
     --text-light: #ecf0f1;
     --correct: #4CAF50;
     --incorrect: #f44336;
+    --easy: #2ecc71;
+    --medium: #f39c12;
+    --hard: #e74c3c;
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
     line-height: 1.6;
     background-color: #f4f4f4;
     color: #333;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding-bottom: var(--safe-area-inset-bottom);
+    padding-top: var(--safe-area-inset-top);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
 .container {
@@ -32,24 +47,27 @@ body {
     padding: 0 15px;
 }
 
-/* Header */
+/* Header otimizado para mobile */
 .header {
     background: var(--secondary-color);
     color: white;
     padding: 1rem 0;
     text-align: center;
     position: relative;
+    padding-top: calc(1rem + var(--safe-area-inset-top));
 }
 
 .header h1 {
-    font-size: 1.3rem;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
     margin-bottom: 0.3rem;
-    padding: 0 40px; /* Espaço para o botão */
+    padding: 0 40px;
+    font-weight: 600;
 }
 
 .header p {
-    font-size: 0.9rem;
-    padding: 0 40px; /* Espaço para o botão */
+    font-size: clamp(0.85rem, 3vw, 1rem);
+    padding: 0 40px;
+    opacity: 0.9;
 }
 
 .back-button {
@@ -63,18 +81,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.2);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
+    touch-action: manipulation;
 }
 
-.back-button:hover {
+.back-button:hover, .back-button:active {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Main Content */
+/* Main Content otimizado para touch */
 .main-content {
     padding: 1.5rem 0;
     flex: 1;
@@ -89,22 +108,39 @@ body {
 
 .game-card {
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 1.2rem;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-decoration: none;
     color: inherit;
     border-top: 4px solid var(--primary-color);
+    display: block;
+    -webkit-user-drag: none;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
 }
 
-.game-card:hover {
-    transform: translateY(-3px);
+.game-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.03);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.game-card:active::after {
+    opacity: 1;
 }
 
 .card-icon {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: var(--primary-color);
     margin-bottom: 0.8rem;
 }
@@ -113,35 +149,32 @@ body {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--dark-color);
+    font-weight: 600;
 }
 
 .game-card p {
     color: #666;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     margin-bottom: 1.2rem;
+    line-height: 1.4;
 }
 
 .btn-jogar {
     display: inline-block;
     background: var(--primary-color);
     color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.1s ease;
 }
 
-.coming-soon {
-    opacity: 0.7;
-    filter: grayscale(50%);
-    cursor: not-allowed;
+.game-card:active .btn-jogar {
+    transform: scale(0.95);
 }
 
-.coming-soon .btn-jogar {
-    background-color: #95a5a6;
-}
-
-/* Footer */
+/* Footer otimizado para mobile */
 .footer {
     background: var(--secondary-color);
     color: white;
@@ -149,26 +182,40 @@ body {
     padding: 1rem 0;
     margin-top: auto;
     font-size: 0.8rem;
+    padding-bottom: calc(1rem + var(--safe-area-inset-bottom));
 }
 
-/* Media Queries para telas maiores */
-@media (min-width: 480px) {
-    .header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .header p {
-        font-size: 1rem;
-    }
-    
-    .back-button {
-        width: 35px;
-        height: 35px;
-        font-size: 1.3rem;
-    }
-    
+.footer p {
+    margin: 0.3rem 0;
+}
+
+/* Media Queries para telas maiores com melhor progressão */
+@media (min-width: 400px) {
     .games-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 600px) {
+    .header {
+        padding: 1.2rem 0;
+        padding-top: calc(1.2rem + var(--safe-area-inset-top));
+    }
+    
+    .header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .game-card {
+        padding: 1.4rem;
+    }
+    
+    .card-icon {
+        font-size: 2.4rem;
+    }
+    
+    .game-card h2 {
+        font-size: 1.3rem;
     }
 }
 
@@ -180,29 +227,24 @@ body {
     .games-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
-        margin-top: 2rem;
     }
     
     .game-card {
         padding: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .game-card:hover::after {
+        opacity: 0;
     }
     
     .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-    
-    .game-card h2 {
-        font-size: 1.3rem;
-    }
-    
-    .game-card p {
-        font-size: 0.9rem;
-    }
-    
-    .btn-jogar {
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
+        font-size: 2.8rem;
     }
     
     .footer {
@@ -210,15 +252,47 @@ body {
     }
 }
 
-.card-icon .fa-graduation-cap {
-    color: var(--primary-color);
-    font-size: 2rem;
-    margin-bottom: 0.8rem;
+@media (min-width: 1024px) {
+    .header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .header p {
+        font-size: 1.1rem;
+    }
+    
+    .game-card h2 {
+        font-size: 1.4rem;
+    }
+    
+    .game-card p {
+        font-size: 1rem;
+    }
 }
 
-@media (min-width: 768px) {
-    .card-icon .fa-graduation-cap {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+/* Estilos específicos para ícones */
+.card-icon .fa-graduation-cap {
+    color: var(--primary-color);
+}
+
+/* Melhorias de acessibilidade */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Prevenir zoom em inputs em mobile */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select,
+    textarea,
+    input {
+        font-size: 16px;
     }
 }

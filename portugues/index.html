@@ -2,16 +2,20 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jogos de Português - SAEB</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <a href="../../index.html" class="back-button">
+            <a href="../../index.html" class="back-button" aria-label="Voltar">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <h1>Jogos de Português</h1>
@@ -23,7 +27,7 @@
         <div class="container">
             <div class="games-grid">
                 <!-- Desafio Ortográfico -->
-                <a href="ortografico/index.html" class="game-card">
+                <a href="ortografico/index.html" class="game-card" aria-label="Desafio Ortográfico">
                     <div class="card-icon">
                         <i class="fas fa-spell-check"></i>
                     </div>
@@ -33,7 +37,7 @@
                 </a>
 
                 <!-- Interpretação de Texto -->
-                <a href="interpretacao/index.html" class="game-card">
+                <a href="interpretacao/index.html" class="game-card" aria-label="Interpretação de Texto">
                     <div class="card-icon">
                         <i class="fas fa-book-reader"></i>
                     </div>
@@ -43,7 +47,7 @@
                 </a>
 
                 <!-- Resgate Gramatical -->
-                <a href="gramatica/index.html" class="game-card">
+                <a href="gramatica/index.html" class="game-card" aria-label="Resgate Gramatical">
                     <div class="card-icon">
                         <i class="fas fa-spell-check"></i>
                     </div>
@@ -52,8 +56,8 @@
                     <span class="btn-jogar">Jogar</span>
                 </a>
 
-                <!-- SAEB Português (NOVO JOGO) -->
-                <a href="saeb/index.html" class="game-card">
+                <!-- SAEB Português -->
+                <a href="saeb/index.html" class="game-card" aria-label="SAEB Português">
                     <div class="card-icon">
                         <i class="fas fa-graduation-cap"></i>
                     </div>
