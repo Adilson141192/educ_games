@@ -7,17 +7,13 @@
 }
 
 :root {
-    --primary-color: #3498db;
+    --primary-color: #3498db; /* Azul para Português */
     --secondary-color: #2ecc71;
     --accent-color: #3498db;
     --dark-color: #2c3e50;
     --light-color: #ecf0f1;
     --text-color: #333;
     --text-light: #7f8c8d;
-}
-
-html {
-    height: 100%;
 }
 
 body {
@@ -30,7 +26,7 @@ body {
 }
 
 .container {
-    width: 100%;
+    width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
@@ -40,13 +36,10 @@ body {
 .header {
     background-color: var(--dark-color);
     color: white;
-    padding: 1rem 0;
+    padding: 2rem 0;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    width: 100%;
+    position: relative;
 }
 
 .header h1 {
@@ -84,7 +77,6 @@ body {
 .main-content {
     padding: 2rem 0;
     flex: 1;
-    width: 100%;
 }
 
 .games-grid {
@@ -150,28 +142,18 @@ body {
     background-color: var(--dark-color);
     color: white;
     text-align: center;
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     font-size: 0.9rem;
-    width: 100%;
 }
 
 /* Media Queries para mobile */
 @media (max-width: 767px) {
-    body {
-        overflow-x: hidden;
-        display: block;
-        height: auto;
-        min-height: 100vh;
-    }
-
     .header {
-        position: sticky;
-        top: 0;
-        padding: 1rem 0;
-        padding-left: 60px;
+        padding: 1.5rem 0;
         text-align: left;
+        padding-left: 60px;
     }
-
+    
     .back-button {
         position: fixed;
         top: 15px;
@@ -187,28 +169,20 @@ body {
         justify-content: center;
         transform: none;
     }
-
+    
     .back-button:hover {
         transform: none;
         background: rgba(0,0,0,0.9);
     }
-
+    
     .header h1 {
         font-size: 1.5rem;
     }
-
+    
     .header p {
         font-size: 0.9rem;
     }
-
-    .main-content {
-        padding: 1rem 0;
-    }
-
-    .games-grid {
-        gap: 1rem;
-    }
-
+    
     .game-card {
         padding: 1.2rem;
     }
