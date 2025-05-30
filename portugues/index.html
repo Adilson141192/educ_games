@@ -2,23 +2,44 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Jogos educativos de língua portuguesa para preparação para o SAEB">
+    <meta name="keywords" content="SAEB, Português, Jogos Educativos, Ensino Fundamental">
+    <meta name="author" content="Adilson L. S. Junior">
     <title>Jogos de Português - SAEB</title>
+    
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="../../style.css" as="style">
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2c3e50">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Português SAEB">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <meta name="msapplication-TileColor" content="#2c3e50">
+    <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+    
+    <!-- Prefetch para páginas de jogos -->
+    <link rel="prefetch" href="ortografico/index.html" as="document">
+    <link rel="prefetch" href="interpretacao/index.html" as="document">
+    <link rel="prefetch" href="gramatica/index.html" as="document">
+    <link rel="prefetch" href="saeb/index.html" as="document">
 </head>
 <body>
     <header class="header">
         <div class="container">
             <a href="../index.html" class="back-button" aria-label="Voltar para a página inicial">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                <span class="sr-only">Voltar</span>
             </a>
             <h1>Jogos de Português</h1>
             <p>Pratique sua língua portuguesa de forma divertida!</p>
@@ -51,7 +72,7 @@
                 <!-- Resgate Gramatical -->
                 <a href="gramatica/index.html" class="game-card" aria-label="Resgate Gramatical - Identifique e corrija erros gramaticais">
                     <div class="card-icon">
-                        <i class="fas fa-spell-check" aria-hidden="true"></i>
+                        <i class="fas fa-highlighter" aria-hidden="true"></i>
                     </div>
                     <h2>Resgate Gramatical</h2>
                     <p>Identifique e corrija erros gramaticais</p>
@@ -74,10 +95,21 @@
     <footer class="footer">
         <div class="container">
             <p>Desenvolvido por Adilson L. S. Junior para a Escola Municipal Liceu Ribamarense</p>
-            <p>© 2025 Todos os direitos reservados</p>
+            <p>© <span id="current-year">2025</span> Todos os direitos reservados</p>
         </div>
     </footer>
 
+    <!-- Scripts otimizados -->
     <script src="script.js" defer></script>
+    
+    <!-- Fallback para caso JavaScript esteja desabilitado -->
+    <noscript>
+        <style>
+            .game-card {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        </style>
+    </noscript>
 </body>
 </html>
