@@ -6,70 +6,55 @@
     <title>Jogos de Português - SAEB</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <header class="header">
-        <div class="container">
-            <a href="../index.html" class="back-button" aria-label="Voltar para página inicial">
-                <i class="fas fa-arrow-left"></i>
-            </a>
+        <a href="../index.html" class="back-button" aria-label="Voltar">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
             <h1>Português</h1>
-            <p>Jogos para aprender português de forma divertida</p>
+            <p>Jogos educativos para o SAEB</p>
         </div>
     </header>
 
     <main class="main-content">
-        <div class="container">
-            <div class="games-grid">
-                <!-- Desafio Ortográfico -->
-                <a href="ortografico/index.html" class="game-card">
-                    <div class="card-icon">
-                        <i class="fas fa-spell-check"></i>
-                    </div>
-                    <h2>Desafio Ortográfico</h2>
-                    <p>Escolha a grafia correta das palavras</p>
-                    <span class="btn-jogar">Jogar</span>
-                </a>
+        <div class="games-grid">
+            <a href="ortografico/index.html" class="game-card">
+                <i class="fas fa-spell-check card-icon"></i>
+                <h2>Desafio Ortográfico</h2>
+                <p>Escolha a grafia correta das palavras</p>
+                <span class="btn-jogar">Jogar</span>
+            </a>
 
-                <!-- Interpretação de Texto -->
-                <a href="interpretacao/index.html" class="game-card">
-                    <div class="card-icon">
-                        <i class="fas fa-book-reader"></i>
-                    </div>
-                    <h2>Interpretação de Texto</h2>
-                    <p>Leia e responda perguntas sobre textos</p>
-                    <span class="btn-jogar">Jogar</span>
-                </a>
+            <a href="interpretacao/index.html" class="game-card">
+                <i class="fas fa-book-reader card-icon"></i>
+                <h2>Interpretação de Texto</h2>
+                <p>Leia e responda perguntas sobre textos</p>
+                <span class="btn-jogar">Jogar</span>
+            </a>
 
-                <!-- Resgate Gramatical -->
-                <a href="gramatica/index.html" class="game-card">
-                    <div class="card-icon">
-                        <i class="fas fa-highlighter"></i>
-                    </div>
-                    <h2>Resgate Gramatical</h2>
-                    <p>Identifique e corrija erros gramaticais</p>
-                    <span class="btn-jogar">Jogar</span>
-                </a>
+            <a href="gramatica/index.html" class="game-card">
+                <i class="fas fa-highlighter card-icon"></i>
+                <h2>Resgate Gramatical</h2>
+                <p>Identifique e corrija erros gramaticais</p>
+                <span class="btn-jogar">Jogar</span>
+            </a>
 
-                <!-- SAEB Português -->
-                <a href="saeb/index.html" class="game-card">
-                    <div class="card-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h2>SAEB Português</h2>
-                    <p>Questões reais das provas do SAEB</p>
-                    <span class="btn-jogar">Jogar</span>
-                </a>
-            </div>
+            <a href="saeb/index.html" class="game-card">
+                <i class="fas fa-graduation-cap card-icon"></i>
+                <h2>SAEB Português</h2>
+                <p>Questões reais das provas</p>
+                <span class="btn-jogar">Jogar</span>
+            </a>
         </div>
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <p>Desenvolvido por Adilson L. S. Junior para a Escola Municipal Liceu Ribamarense - SAEB</p>
-        </div>
+        <p>Desenvolvido por Adilson Junior - Liceu Ribamarense</p>
     </footer>
 
-    <script src="../js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
