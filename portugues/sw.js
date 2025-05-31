@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portugues-saeb-v4';
+const CACHE_NAME = 'portugues-saeb-v5';
 const ASSETS = [
   '/',
   '/index.html',
@@ -6,7 +6,8 @@ const ASSETS = [
   '/script.js',
   '/manifest.json',
   '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/icons/icon-512x512.png',
+  '/offline.html'
 ];
 
 self.addEventListener('install', (e) => {
@@ -24,7 +25,7 @@ self.addEventListener('fetch', (e) => {
     caches.match(e.request)
       .then(cached => cached || fetch(e.request)
       .catch(() => caches.match('/offline.html'))
-  );
+  ));
 });
 
 self.addEventListener('activate', (e) => {
