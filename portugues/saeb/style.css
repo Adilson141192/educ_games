@@ -253,6 +253,33 @@ body {
     background: color-mix(in srgb, var(--secondary-color) 80%, black);
 }
 
+/* Next Button */
+#next-button {
+    display: none;
+    background: var(--primary-color);
+    color: white;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+#next-button:hover {
+    background: color-mix(in srgb, var(--primary-color) 80%, black);
+}
+
+#next-button[style*="display: flex"],
+#next-button[style*="display: block"] {
+    display: flex !important;
+}
+
 /* Pulse Animation */
 .pulse {
     animation: pulse 2s infinite;
@@ -324,6 +351,11 @@ body {
     .btn-jogar {
         margin: 5px;
     }
+
+    #next-button {
+        width: auto;
+        min-width: 200px;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -341,12 +373,8 @@ body {
     }
 }
 
-#next-button {
-    background: var(--primary-color);
-    color: white;
-    margin-top: 20px;
-}
-
-#next-button:hover {
-    background: color-mix(in srgb, var(--primary-color) 80%, black);
+#next-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: color-mix(in srgb, var(--primary-color) 60%, white);
 }

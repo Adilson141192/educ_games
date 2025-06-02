@@ -1,8 +1,9 @@
 /* SAEB Game Script with Enhanced Features */
 const GAME_CONFIG = {
     totalQuestions: 10,
-    timePerQuestion: { "2": 45, "5": 35, "9": 25 },
-    baseScore: 10
+    timePerQuestion: { "2": 60, "5": 45, "9": 30 },
+    baseScore: 10,
+    feedbackDelay: 5000 // Alterado para 5 segundos
 };
 
 const STORAGE_KEY = "saebRanking";
@@ -55,8 +56,28 @@ function setupEventListeners() {
     DOM.backToMenu.addEventListener("click", returnToMenu);
     DOM.rankingButton.addEventListener("click", showRankingMenu);
     DOM.rankingBack.addEventListener("click", returnToMenu);
-    DOM.headerBackButton.addEventListener("click", returnToMenu);
-    DOM.nextButton.addEventListener("click", nextQuestion);
+    
+    DOM.headerBackButton.addEventListener("click", (e) => {
+        if (gameState.isPlaying) {
+            if (confirm("Deseja realmente sair do jogo? Seu progresso será perdido.")) {
+                returnToMenu();
+            }
+        } else {
+            returnToMenu();
+        }
+    });
+
+    DOM.nextButton.addEventListener("click", () => {
+    DOM.nextButton.disabled = true;
+    DOM.nextButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+    
+    // Agora o delay está sendo respeitado corretamente
+    setTimeout(() => {
+        nextQuestion();
+        DOM.nextButton.disabled = false;
+        DOM.nextButton.innerHTML = '<i class="fas fa-arrow-right"></i> Próxima Questão';
+    }, GAME_CONFIG.feedbackDelay);
+});
 
     DOM.yearButtons.forEach(btn => {
         btn.addEventListener("click", () => setYear(btn.dataset.year));
@@ -119,6 +140,7 @@ function loadQuestion() {
     DOM.nextButton.style.display = "none";
     DOM.feedback.textContent = "";
     DOM.feedback.className = "feedback-card";
+    DOM.feedback.style.display = "none";
 
     const availableQuestions = SAEB_QUESTIONS[gameState.currentYear].filter(
         q => !gameState.usedQuestions[gameState.currentYear].includes(q.question)
@@ -145,7 +167,7 @@ function displayQuestion() {
     DOM.options.innerHTML = "";
 
     gameState.currentQuestionObj.options.forEach((option, index) => {
-        if (typeof option !== 'string') return; // Skip invalid options
+        if (typeof option !== 'string') return;
         
         const button = document.createElement("button");
         button.className = "option";
@@ -184,7 +206,8 @@ function checkAnswer(isCorrect) {
         DOM.feedback.className = "feedback-card incorrect";
     }
 
-    DOM.nextButton.style.display = "block";
+    DOM.feedback.style.display = "block";
+    DOM.nextButton.style.display = "flex";
     DOM.nextButton.focus();
 }
 
@@ -221,7 +244,8 @@ function timeOut() {
     gameState.isPlaying = false;
     DOM.feedback.textContent = "⏰ Tempo esgotado!";
     DOM.feedback.className = "feedback-card incorrect";
-    DOM.nextButton.style.display = "block";
+    DOM.feedback.style.display = "block";
+    DOM.nextButton.style.display = "flex";
     DOM.nextButton.focus();
 }
 
@@ -306,8 +330,7 @@ function restartGame() {
     startGame(); 
 }
 
-function returnToMenu(e) {
-    if (e) e.preventDefault();
+function returnToMenu() {
     hideAllScreens();
     DOM.startScreen.style.display = "block";
 }
