@@ -296,3 +296,13 @@ body {
         font-size: 16px;
     }
 }
+
+#next-button {
+    background: var(--primary-color);
+    color: white;
+    margin-top: 20px;
+}
+
+#next-button:hover {
+    background: color-mix(in srgb, var(--primary-color) 80%, black);
+}

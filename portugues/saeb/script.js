@@ -2,7 +2,6 @@
 const GAME_CONFIG = {
     totalQuestions: 10,
     timePerQuestion: { "2": 45, "5": 35, "9": 25 },
-    answerDelay: 2000,
     baseScore: 10
 };
 
@@ -37,7 +36,9 @@ const DOM = {
     feedback: document.getElementById("feedback"),
     finalScore: document.getElementById("final-score"),
     restartButton: document.getElementById("restart-button"),
-    backToMenu: document.getElementById("back-to-menu")
+    backToMenu: document.getElementById("back-to-menu"),
+    nextButton: document.getElementById("next-button"),
+    headerBackButton: document.getElementById("header-back-button")
 };
 
 /* ---------- INITIALIZATION ---------- */
@@ -54,6 +55,8 @@ function setupEventListeners() {
     DOM.backToMenu.addEventListener("click", returnToMenu);
     DOM.rankingButton.addEventListener("click", showRankingMenu);
     DOM.rankingBack.addEventListener("click", returnToMenu);
+    DOM.headerBackButton.addEventListener("click", returnToMenu);
+    DOM.nextButton.addEventListener("click", nextQuestion);
 
     DOM.yearButtons.forEach(btn => {
         btn.addEventListener("click", () => setYear(btn.dataset.year));
@@ -113,6 +116,9 @@ function loadQuestion() {
 
     DOM.question.textContent = "Carregando pergunta...";
     DOM.options.innerHTML = "";
+    DOM.nextButton.style.display = "none";
+    DOM.feedback.textContent = "";
+    DOM.feedback.className = "feedback-card";
 
     const availableQuestions = SAEB_QUESTIONS[gameState.currentYear].filter(
         q => !gameState.usedQuestions[gameState.currentYear].includes(q.question)
@@ -158,8 +164,6 @@ function displayQuestion() {
     });
 
     updateQuestionCounter();
-    DOM.feedback.textContent = "";
-    DOM.feedback.className = "feedback-card";
 }
 
 function checkAnswer(isCorrect) {
@@ -180,11 +184,15 @@ function checkAnswer(isCorrect) {
         DOM.feedback.className = "feedback-card incorrect";
     }
 
-    setTimeout(() => {
-        gameState.currentQuestion++;
-        gameState.isPlaying = true;
-        loadQuestion();
-    }, GAME_CONFIG.answerDelay);
+    DOM.nextButton.style.display = "block";
+    DOM.nextButton.focus();
+}
+
+function nextQuestion() {
+    gameState.currentQuestion++;
+    gameState.isPlaying = true;
+    gameState.timeLeft = GAME_CONFIG.timePerQuestion[gameState.currentYear];
+    loadQuestion();
 }
 
 function startTimer() {
@@ -213,12 +221,8 @@ function timeOut() {
     gameState.isPlaying = false;
     DOM.feedback.textContent = "⏰ Tempo esgotado!";
     DOM.feedback.className = "feedback-card incorrect";
-
-    setTimeout(() => {
-        gameState.currentQuestion++;
-        gameState.isPlaying = true;
-        loadQuestion();
-    }, GAME_CONFIG.answerDelay);
+    DOM.nextButton.style.display = "block";
+    DOM.nextButton.focus();
 }
 
 /* ---------- UI UPDATES ---------- */
@@ -302,7 +306,8 @@ function restartGame() {
     startGame(); 
 }
 
-function returnToMenu() {
+function returnToMenu(e) {
+    if (e) e.preventDefault();
     hideAllScreens();
     DOM.startScreen.style.display = "block";
 }
