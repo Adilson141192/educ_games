@@ -2,47 +2,58 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAEB Português - Jogos Educacionais</title>
-    <link rel="stylesheet" href="../../../style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jogos de Português - SAEB</title>
+    <meta name="description" content="Jogos educativos de língua portuguesa para preparação para o SAEB">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="icons/icon-192x192.png">
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <a href="../index.html" class="back-button">
+            <a href="index.html" class="back-button" aria-label="Voltar">
                 <i class="fas fa-arrow-left"></i>
             </a>
-            <h1>SAEB Português</h1>
-            <p>Prepare-se para as avaliações com questões reais do SAEB!</p>
+            <h1>Jogos de Português</h1>
+            <p>Pratique sua língua portuguesa de forma divertida!</p>
         </div>
     </header>
 
     <main class="main-content">
         <div class="container">
             <div id="game-container">
+                <!-- Start Screen -->
                 <div id="start-screen">
                     <div id="year-selector">
                         <h2>Selecione o Ano Escolar:</h2>
                         <div class="year-options">
-                            <button class="year-btn active" data-year="2">
+                            <button class="year-btn active" data-year="2" aria-label="2º Ano">
                                 <i class="fas fa-child"></i> 2º Ano
                             </button>
-                            <button class="year-btn" data-year="5">
+                            <button class="year-btn" data-year="5" aria-label="5º Ano">
                                 <i class="fas fa-user-graduate"></i> 5º Ano
                             </button>
-                            <button class="year-btn" data-year="9">
+                            <button class="year-btn" data-year="9" aria-label="9º Ano">
                                 <i class="fas fa-graduation-cap"></i> 9º Ano
                             </button>
                         </div>
                     </div>
 
-                    <button id="start-button" class="pulse">
+                    <button id="start-button" class="pulse" aria-label="Iniciar Jogo">
                         <i class="fas fa-play"></i> Iniciar Jogo
+                    </button>
+
+                    <button id="ranking-button" class="btn-ranking" aria-label="Ver Ranking">
+                        <i class="fas fa-trophy"></i> Ranking
                     </button>
                 </div>
 
+                <!-- Game Screen -->
                 <div id="game-screen" style="display:none">
                     <div class="game-header">
                         <div id="timer" class="game-timer">
@@ -57,24 +68,34 @@
                     </div>
 
                     <div id="question-container" class="card">
-                        <div id="question">Carregando pergunta...</div>
+                        <div id="question" role="alert" aria-live="polite">Carregando pergunta...</div>
                     </div>
 
-                    <div id="options" class="options-grid">
-                        <!-- Opções serão preenchidas via JavaScript -->
-                    </div>
+                    <div id="options" class="options-grid" role="group"></div>
 
-                    <div id="feedback" class="feedback-card"></div>
+                    <div id="feedback" class="feedback-card" role="alert"></div>
                 </div>
 
+                <!-- End Screen -->
                 <div id="end-screen" style="display:none">
                     <div class="card">
                         <h2>Fim do Jogo!</h2>
                         <p>Sua pontuação final: <span id="final-score">0</span></p>
-                        <button id="restart-button" class="btn-jogar">
+                        <button id="restart-button" class="btn-jogar" aria-label="Jogar Novamente">
                             <i class="fas fa-redo"></i> Jogar Novamente
                         </button>
-                        <button id="back-to-menu" class="btn-jogar">
+                        <button id="back-to-menu" class="btn-jogar" aria-label="Voltar ao Menu">
+                            <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ranking Screen -->
+                <div id="ranking-screen" style="display:none">
+                    <div class="card">
+                        <h2>Ranking (Top 10)</h2>
+                        <ol id="ranking-list" aria-live="polite"></ol>
+                        <button id="ranking-back" class="btn-jogar" aria-label="Voltar ao Menu">
                             <i class="fas fa-arrow-left"></i> Voltar ao Menu
                         </button>
                     </div>
@@ -90,7 +111,21 @@
         </div>
     </footer>
 
-    <script src="questions.js"></script>
-    <script src="script.js"></script>
+    <script src="questions.js" defer></script>
+    <script src="script.js" defer></script>
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
