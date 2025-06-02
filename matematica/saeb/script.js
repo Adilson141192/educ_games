@@ -1,11 +1,11 @@
 const GAME_CONFIG = {
     totalQuestions: 10,
     timePerQuestion: {
-        "2": 45,
-        "5": 35,
-        "9": 25
+        "2": 60,
+        "5": 45,
+        "9": 30
     },
-    answerDelay: 2000,
+    answerDelay: 5000,
     basePoints: 10
 };
 

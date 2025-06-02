@@ -1,9 +1,13 @@
 /* SAEB Game Script with Enhanced Features */
 const GAME_CONFIG = {
     totalQuestions: 10,
-    timePerQuestion: { "2": 60, "5": 45, "9": 30 },
-    baseScore: 10,
-    feedbackDelay: 5000,
+    timePerQuestion: {
+        "2": 60,
+        "5": 45,
+        "9": 30
+    },
+    answerDelay: 5000,
+    basePoints: 10,
     timeBonusDivisor: 5
 };
 
@@ -43,12 +47,10 @@ const DOM = {
     headerBackButton: document.getElementById("header-back-button")
 };
 
-/* ---------- INITIALIZATION ---------- */
 function init() {
     setupEventListeners();
     setYear("2");
     updateRankingScreen();
-    checkPWA();
 }
 
 function setupEventListeners() {
@@ -88,13 +90,7 @@ function handleNextQuestion() {
         nextQuestion();
         DOM.nextButton.disabled = false;
         DOM.nextButton.innerHTML = '<i class="fas fa-arrow-right"></i> Próxima Questão';
-    }, GAME_CONFIG.feedbackDelay);
-}
-
-function checkPWA() {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        document.body.classList.add('pwa-mode');
-    }
+    }, GAME_CONFIG.answerDelay);
 }
 
 /* ---------- GAME SETUP ---------- */
@@ -202,7 +198,7 @@ function checkAnswer(isCorrect) {
 
     if (isCorrect) {
         const timeBonus = Math.floor(gameState.timeLeft / GAME_CONFIG.timeBonusDivisor);
-        gameState.score += GAME_CONFIG.baseScore + timeBonus;
+        gameState.score += GAME_CONFIG.basePoints + timeBonus;
         updateScore();
         DOM.feedback.textContent = `✅ Correto! +${timeBonus} bônus! ${gameState.currentQuestionObj.explanation}`;
         DOM.feedback.className = "feedback-card correct";

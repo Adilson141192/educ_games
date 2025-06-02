@@ -46,7 +46,6 @@ function init() {
     setupEventListeners();
     setYear("2");
     updateRankingScreen();
-    checkPWA();
 }
 
 function setupEventListeners() {
@@ -66,12 +65,6 @@ function setupEventListeners() {
             }
         });
     });
-}
-
-function checkPWA() {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        document.body.classList.add('pwa-mode');
-    }
 }
 
 /* ---------- GAME SETUP ---------- */
