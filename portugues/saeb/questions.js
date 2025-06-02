@@ -2,12 +2,6 @@ const SAEB_QUESTIONS = {
     "2": [
         {
             question: "Qual palavra completa a frase: 'O ____ está quente'?",
-            options: ["sol", "sól", "sôl", "soll"],
-            correct: 0,
-            explanation: "A grafia correta é 'sol' com 's' e 'l' no final."
-        },
-        {
-            question: "Qual palavra completa a frase: 'O ____ está quente'?",
             options: [
                 "sol",
                 "sól",
