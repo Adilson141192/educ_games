@@ -2,74 +2,72 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jogos de Português - SAEB</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <header class="header">
-        <a href="../index.html" class="back-button" aria-label="Voltar">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <div>
-            <h1>Português</h1>
-            <p>Jogos educativos para o SAEB</p>
+        <div class="container">
+            <a href="index.html" class="back-button" aria-label="Voltar">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Jogos de Português</h1>
+            <p>Pratique sua língua portuguesa de forma divertida!</p>
         </div>
     </header>
 
     <main class="main-content">
-        <div class="games-grid">
-            <a href="ortografico/index.html" class="game-card">
-                <i class="fas fa-spell-check card-icon"></i>
-                <h2>Desafio Ortográfico</h2>
-                <p>Escolha a grafia correta das palavras</p>
-                <span class="btn-jogar">Jogar</span>
-            </a>
-
-            <a href="interpretacao/index.html" class="game-card">
-                <i class="fas fa-book-reader card-icon"></i>
-                <h2>Interpretação de Texto</h2>
-                <p>Leia e responda perguntas sobre textos</p>
-                <span class="btn-jogar">Jogar</span>
-            </a>
-
-            <a href="gramatica/index.html" class="game-card">
-                <i class="fas fa-highlighter card-icon"></i>
-                <h2>Resgate Gramatical</h2>
-                <p>Identifique e corrija erros gramaticais</p>
-                <span class="btn-jogar">Jogar</span>
-            </a>
-
-            <a href="saeb/index.html" class="game-card">
-                <i class="fas fa-graduation-cap card-icon"></i>
-                <h2>SAEB Português</h2>
-                <p>Questões reais das provas</p>
-                <span class="btn-jogar">Jogar</span>
-            </a>
+        <div class="container">
+            <div class="games-grid">
+                <a href="ortografico/index.html" class="game-card" aria-label="Desafio Ortográfico">
+                    <div class="card-icon">
+                        <i class="fas fa-spell-check"></i>
+                    </div>
+                    <h2>Desafio Ortográfico</h2>
+                    <p>Escolha a grafia correta das palavras</p>
+                    <span class="btn-jogar">Jogar</span>
+                </a>
+                <a href="interpretacao/index.html" class="game-card" aria-label="Interpretação de Texto">
+                    <div class="card-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h2>Interpretação de Texto</h2>
+                    <p>Leia e responda perguntas sobre textos</p>
+                    <span class="btn-jogar">Jogar</span>
+                </a>
+                <a href="gramatica/index.html" class="game-card" aria-label="Resgate Gramatical">
+                    <div class="card-icon">
+                        <i class="fas fa-spell-check"></i>
+                    </div>
+                    <h2>Resgate Gramatical</h2>
+                    <p>Identifique e corrija erros gramaticais</p>
+                    <span class="btn-jogar">Jogar</span>
+                </a>
+                <a href="saeb/index.html" class="game-card" aria-label="SAEB Português">
+                    <div class="card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h2>SAEB Português</h2>
+                    <p>Questões reais das provas do SAEB</p>
+                    <span class="btn-jogar">Jogar</span>
+                </a>
+            </div>
         </div>
     </main>
 
     <footer class="footer">
-        <p>Desenvolvido por Adilson Junior - Liceu Ribamarense</p>
-        <span id="current-year"></span>
+        <div class="container">
+            <p>Desenvolvido por Adilson L. S. Junior para a Escola Municipal Liceu Ribamarense</p>
+            <p>© 2025 Todos os direitos reservados</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // Registrar Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registrado com sucesso:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('Falha ao registrar ServiceWorker:', error);
-                    });
-            });
-        }
-    </script>
 </body>
 </html>
