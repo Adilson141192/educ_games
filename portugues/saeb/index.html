@@ -16,11 +16,11 @@
 <body>
     <header class="header">
         <div class="container">
-            <a href="#" id="header-back-button" class="back-button" aria-label="Voltar">
+            <button id="header-back-button" class="back-button" aria-label="Voltar">
                 <i class="fas fa-arrow-left"></i>
-            </a>
-            <h1>Jogos de Português</h1>
-            <p>Pratique sua língua portuguesa de forma divertida!</p>
+            </button>
+            <h1>SAEB Português</h1>
+            <p>Questões reais das provas do SAEB</p>
         </div>
     </header>
 
@@ -31,14 +31,14 @@
                 <div id="start-screen">
                     <div id="year-selector">
                         <h2>Selecione o Ano Escolar:</h2>
-                        <div class="year-options">
-                            <button class="year-btn active" data-year="2" aria-label="2º Ano">
+                        <div class="year-options" role="radiogroup">
+                            <button class="year-btn active" data-year="2" aria-label="2º Ano" role="radio" aria-checked="true">
                                 <i class="fas fa-child"></i> 2º Ano
                             </button>
-                            <button class="year-btn" data-year="5" aria-label="5º Ano">
+                            <button class="year-btn" data-year="5" aria-label="5º Ano" role="radio" aria-checked="false">
                                 <i class="fas fa-user-graduate"></i> 5º Ano
                             </button>
-                            <button class="year-btn" data-year="9" aria-label="9º Ano">
+                            <button class="year-btn" data-year="9" aria-label="9º Ano" role="radio" aria-checked="false">
                                 <i class="fas fa-graduation-cap"></i> 9º Ano
                             </button>
                         </div>
@@ -54,21 +54,21 @@
                 </div>
 
                 <!-- Game Screen -->
-                <div id="game-screen" style="display:none">
+                <div id="game-screen" style="display:none" aria-live="polite">
                     <div class="game-header">
                         <div id="timer" class="game-timer">
-                            <i class="fas fa-clock"></i> <span>30</span>
+                            <i class="fas fa-clock" aria-hidden="true"></i> <span>30</span>
                         </div>
                         <div id="score" class="game-score">
-                            <i class="fas fa-star"></i> <span>0</span>
+                            <i class="fas fa-star" aria-hidden="true"></i> <span>0</span>
                         </div>
                         <div id="question-counter" class="game-counter">
-                            <i class="fas fa-question"></i> <span>0/10</span>
+                            <i class="fas fa-question" aria-hidden="true"></i> <span>0/10</span>
                         </div>
                     </div>
 
                     <div id="question-container" class="card">
-                        <div id="question" role="alert" aria-live="polite">Carregando pergunta...</div>
+                        <div id="question">Carregando pergunta...</div>
                     </div>
 
                     <div id="options" class="options-grid" role="group"></div>
@@ -81,7 +81,7 @@
                 </div>
 
                 <!-- End Screen -->
-                <div id="end-screen" style="display:none">
+                <div id="end-screen" style="display:none" aria-live="polite">
                     <div class="card">
                         <h2>Fim do Jogo!</h2>
                         <p>Sua pontuação final: <span id="final-score">0</span></p>
@@ -95,10 +95,10 @@
                 </div>
 
                 <!-- Ranking Screen -->
-                <div id="ranking-screen" style="display:none">
+                <div id="ranking-screen" style="display:none" aria-live="polite">
                     <div class="card">
                         <h2>Ranking (Top 10)</h2>
-                        <ol id="ranking-list" aria-live="polite"></ol>
+                        <ol id="ranking-list"></ol>
                         <button id="ranking-back" class="btn-jogar" aria-label="Voltar ao Menu">
                             <i class="fas fa-arrow-left"></i> Voltar ao Menu
                         </button>

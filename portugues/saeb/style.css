@@ -83,6 +83,8 @@ body {
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.2);
     transition: background-color 0.2s ease;
+    border: none;
+    cursor: pointer;
 }
 
 .back-button:hover {
@@ -106,6 +108,7 @@ body {
     justify-content: center;
     gap: 10px;
     margin: 20px 0;
+    flex-wrap: wrap;
 }
 
 .year-btn {
@@ -116,11 +119,17 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: bold;
+    min-width: 100px;
 }
 
 .year-btn.active {
     background: var(--primary-color);
     color: white;
+}
+
+.year-btn:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
 }
 
 /* Game Screen */
@@ -129,6 +138,8 @@ body {
     justify-content: space-between;
     margin-bottom: 20px;
     font-size: 1.1rem;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .game-timer, .game-score, .game-counter {
@@ -146,6 +157,7 @@ body {
 
 .game-timer.critical {
     background: color-mix(in srgb, var(--critical) 20%, transparent);
+    animation: pulse 1s infinite;
 }
 
 .card {
@@ -188,11 +200,22 @@ body {
     transform: scale(0.98);
 }
 
+.option:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
 .feedback-card {
     padding: 15px;
     border-radius: 5px;
     margin-top: 15px;
     display: none;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
 }
 
 .feedback-card.correct {
@@ -337,6 +360,12 @@ body {
     border-width: 0;
 }
 
+/* Focus styles */
+button:focus, [role="option"]:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
 /* Responsive Design */
 @media (min-width: 768px) {
     .options-grid {
@@ -377,4 +406,16 @@ body {
     opacity: 0.7;
     cursor: not-allowed;
     background: color-mix(in srgb, var(--primary-color) 60%, white);
+}
+
+/* Animation for timer */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* PWA specific styles */
+.pwa-mode .header {
+    padding-top: calc(1rem + var(--safe-area-inset-top) + 20px);
 }

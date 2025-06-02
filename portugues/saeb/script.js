@@ -3,7 +3,8 @@ const GAME_CONFIG = {
     totalQuestions: 10,
     timePerQuestion: { "2": 60, "5": 45, "9": 30 },
     baseScore: 10,
-    feedbackDelay: 5000 // Alterado para 5 segundos
+    feedbackDelay: 5000,
+    timeBonusDivisor: 5
 };
 
 const STORAGE_KEY = "saebRanking";
@@ -67,17 +68,7 @@ function setupEventListeners() {
         }
     });
 
-    DOM.nextButton.addEventListener("click", () => {
-    DOM.nextButton.disabled = true;
-    DOM.nextButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
-    
-    // Agora o delay está sendo respeitado corretamente
-    setTimeout(() => {
-        nextQuestion();
-        DOM.nextButton.disabled = false;
-        DOM.nextButton.innerHTML = '<i class="fas fa-arrow-right"></i> Próxima Questão';
-    }, GAME_CONFIG.feedbackDelay);
-});
+    DOM.nextButton.addEventListener("click", handleNextQuestion);
 
     DOM.yearButtons.forEach(btn => {
         btn.addEventListener("click", () => setYear(btn.dataset.year));
@@ -87,6 +78,17 @@ function setupEventListeners() {
             }
         });
     });
+}
+
+function handleNextQuestion() {
+    DOM.nextButton.disabled = true;
+    DOM.nextButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+    
+    setTimeout(() => {
+        nextQuestion();
+        DOM.nextButton.disabled = false;
+        DOM.nextButton.innerHTML = '<i class="fas fa-arrow-right"></i> Próxima Questão';
+    }, GAME_CONFIG.feedbackDelay);
 }
 
 function checkPWA() {
@@ -99,8 +101,10 @@ function checkPWA() {
 function setYear(year) {
     gameState.currentYear = year;
     DOM.yearButtons.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.year === year);
-        btn.setAttribute("aria-pressed", btn.dataset.year === year);
+        const isSelected = btn.dataset.year === year;
+        btn.classList.toggle("active", isSelected);
+        btn.setAttribute("aria-checked", isSelected);
+        btn.setAttribute("tabindex", isSelected ? "0" : "-1");
     });
 }
 
@@ -108,6 +112,7 @@ function showRankingMenu() {
     hideAllScreens();
     updateRankingScreen();
     DOM.rankingScreen.style.display = "block";
+    DOM.rankingList.focus();
 }
 
 /* ---------- GAME LOGIC ---------- */
@@ -174,6 +179,7 @@ function displayQuestion() {
         button.textContent = option;
         button.setAttribute("role", "option");
         button.setAttribute("aria-label", `Opção ${index + 1}: ${option}`);
+        button.setAttribute("tabindex", "0");
         button.addEventListener("click", () => 
             checkAnswer(index === gameState.currentQuestionObj.correct)
         );
@@ -195,7 +201,7 @@ function checkAnswer(isCorrect) {
     clearInterval(gameState.timer);
 
     if (isCorrect) {
-        const timeBonus = Math.floor(gameState.timeLeft / 5);
+        const timeBonus = Math.floor(gameState.timeLeft / GAME_CONFIG.timeBonusDivisor);
         gameState.score += GAME_CONFIG.baseScore + timeBonus;
         updateScore();
         DOM.feedback.textContent = `✅ Correto! +${timeBonus} bônus! ${gameState.currentQuestionObj.explanation}`;
@@ -313,7 +319,10 @@ function updateRankingScreen() {
     DOM.rankingList.innerHTML = "";
     
     if (ranking.length === 0) {
-        DOM.rankingList.innerHTML = "<li>Nenhum resultado ainda.</li>";
+        const li = document.createElement("li");
+        li.textContent = "Nenhum resultado ainda.";
+        li.setAttribute("aria-label", "Nenhum resultado ainda");
+        DOM.rankingList.appendChild(li);
         return;
     }
     
@@ -333,6 +342,7 @@ function restartGame() {
 function returnToMenu() {
     hideAllScreens();
     DOM.startScreen.style.display = "block";
+    DOM.startButton.focus();
 }
 
 /* ---------- LAUNCH ---------- */
